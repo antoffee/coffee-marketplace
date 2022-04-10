@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+// import { Route, Routes } from 'react-router-dom';
 import { AppBar, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { RegisterPage } from 'pages/RegisterPage/RegisterPage';
 
 import { Navbar } from 'components/Navbar';
 import { RegisterPopup } from 'components/RegisterPopup';
@@ -18,9 +17,9 @@ export const App: React.FC = () => {
         <div className={cx('App')}>
             <AppBar />
             <Navbar onLoginClick={noop} onLogoClick={noop} onRegisterClick={() => setRegisterPopupOpened(true)} />
-            <Routes>
+            {/* <Routes>
                 <Route path="/register" caseSensitive element={<RegisterPage />}></Route>
-            </Routes>
+            </Routes> */}
             <RegisterPopup
                 opened={registerPopupOpened}
                 onCloseClick={() => setRegisterPopupOpened(false)}
