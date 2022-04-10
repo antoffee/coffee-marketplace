@@ -9,6 +9,5 @@ export type RegisterFormErrors = Partial<Record<keyof RegisterFormValues, string
 
 export type RegisterPopupProps = {
     opened: boolean;
-    onSubmit: (values: RegisterFormValues) => void;
     onCloseClick: () => void;
 };

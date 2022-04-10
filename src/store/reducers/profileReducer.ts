@@ -5,6 +5,7 @@ import { fetchSignUp } from 'api/user/fetchSignUp';
 const fetchSignup = createAsyncThunk('users/fetchSugnUp', fetchSignUp);
 
 interface ProfileState {
+    authentificated?: boolean;
     userInfo?: unknown;
     signUpLoading?: boolean;
     userInfoLoading?: boolean;
@@ -14,10 +15,14 @@ interface ProfileState {
 const initialState = {} as ProfileState;
 
 // Then, handle actions in your reducers:
-const usersSlice = createSlice({
+const profileSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        authentificate: (state) => {
+            state.authentificated = true;
+        },
+        logout: () => initialState,
         // standard reducer logic, with auto-generated action types per reducer
     },
     extraReducers: (builder) => {
@@ -35,4 +40,5 @@ const usersSlice = createSlice({
     },
 });
 
-export default usersSlice.reducer;
+export const { authentificate, logout } = profileSlice.actions;
+export default profileSlice.reducer;
