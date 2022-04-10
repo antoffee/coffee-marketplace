@@ -20,7 +20,7 @@
             }
         },
         {
-            "files": ["**/*.css"],
+            "files": ["**/*.css", "**/*.scss"],
             "options": {
                 "parser": "css"
             }

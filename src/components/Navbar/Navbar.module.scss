@@ -1,0 +1,12 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    justify-content: space-between;
+    padding: 0 32px;
+
+    &-buttons {
+        display: flex;
+        column-gap: 16px;
+    }
+}

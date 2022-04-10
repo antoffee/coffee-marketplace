@@ -1,0 +1,46 @@
+.register-popup {
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px 32px;
+    border-radius: 12px;
+    height: fit-content;
+    width: fit-content;
+    background-color: white;
+    justify-content: flex-end;
+    position: relative;
+
+    .close {
+        margin-left: auto;
+        position: absolute;
+        right: 8px;
+        top: 8px;
+    }
+
+    &-wrapper {
+        position: absolute;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        display: none;
+        background-color: #00000058;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+
+        &.opened {
+            display: flex;
+        }
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        & > * {
+            margin-bottom: 24px;
+        }
+    }
+}
