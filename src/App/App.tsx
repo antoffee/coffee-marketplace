@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AppBar, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useAppDispatch } from 'store/hooks';
-import { authentificate } from 'store/reducers/profileReducer';
+import { fetchLoginUser } from 'store/reducers/profileReducer';
 
 import { LoginPopup } from 'components/LoginPopup';
 import { Navbar } from 'components/Navbar';
@@ -32,8 +32,8 @@ export const App: React.FC = () => {
             </Routes> */}
             <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
             <LoginPopup
-                onSubmit={() => {
-                    dispatch(authentificate());
+                onSubmit={(values) => {
+                    void dispatch(fetchLoginUser({ password: values.password, username: values.email }));
                     setLoginPopupOpened(false);
                 }}
                 opened={loginPopupOpened}

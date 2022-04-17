@@ -14,7 +14,7 @@ import styles from './Navbar.module.scss';
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onRegisterClick }) => {
-    const logged = useAppSelector((state) => state.profile.authentificated);
+    const logged = useAppSelector((state) => !!state.profile.userEmail);
     const [profilePopoverOpened, setProfilePopoverOpened] = useState(false);
 
     const popover = useRef(null);

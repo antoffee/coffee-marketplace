@@ -1,8 +1,6 @@
 export type LoginFormValues = {
     email: string;
     password: string;
-    passwordRepeat: string;
-    code?: string;
 };
 
 export type LoginFormErrors = Partial<Record<keyof LoginFormValues, string | undefined>>;
