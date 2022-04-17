@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-// import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AppBar, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { HomePage } from 'pages/HomePage';
 import { useAppDispatch } from 'store/hooks';
 import { fetchLoginUser } from 'store/reducers/profileReducer';
 
@@ -27,9 +28,9 @@ export const App: React.FC = () => {
                 onLogoClick={noop}
                 onRegisterClick={() => setRegisterPopupOpened(true)}
             />
-            {/* <Routes>
-                <Route path="/register" caseSensitive element={<RegisterPage />}></Route>
-            </Routes> */}
+            <Routes>
+                <Route path="/" caseSensitive element={<HomePage />}></Route>
+            </Routes>
             <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
             <LoginPopup
                 onSubmit={(values) => {
