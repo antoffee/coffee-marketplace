@@ -1,0 +1,1 @@
+export { RegisterPopup } from './RegisterPopup';
