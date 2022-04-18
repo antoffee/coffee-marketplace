@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { CAROUSEL_MOCK } from 'mocks/products';
+import { PRODUCT_MOCK } from 'mocks/products';
 import { SHOPS_MOCK } from 'mocks/shops';
 
+import { Catalog } from 'components/Catalog';
 import { SliderCarousel } from 'components/SliderCarousel';
 
 import { HomePageProps } from './HomePage.types';
@@ -12,20 +14,31 @@ import styles from './HomePage.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
+const MIN_SHOWN_STORES = 2;
+
 export const HomePage: React.FC<HomePageProps> = () => {
     const navigate = useNavigate();
+    const [shownStores, setShownStores] = useState(SHOPS_MOCK.slice(0, MIN_SHOWN_STORES));
     return (
-        <div className={cx('home-page')}>
-            {SHOPS_MOCK.map((item, i) => (
+        <div className={cx('home-page', 'page')}>
+            {shownStores.map((item, i) => (
                 <>
                     <h2>{item.name}</h2>
                     <SliderCarousel
                         onItemClick={(item) => navigate(`/product-details/${item.id}`)}
-                        items={CAROUSEL_MOCK}
+                        items={PRODUCT_MOCK}
                         key={i}
                     />
                 </>
             ))}
+            {shownStores.length < SHOPS_MOCK.length && (
+                <Button onClick={() => setShownStores(SHOPS_MOCK)}>Показать больше магазинов</Button>
+            )}
+            <Typography variant="h4">Все товары</Typography>
+            <Catalog
+                items={[...PRODUCT_MOCK, ...PRODUCT_MOCK]}
+                onItemClick={(item) => navigate(`/product-details/${item.id}`)}
+            />
         </div>
     );
 };

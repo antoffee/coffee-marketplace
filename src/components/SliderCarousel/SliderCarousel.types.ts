@@ -1,11 +1,6 @@
-export type CarouselItem = {
-    title: string;
-    description: string;
-    imgUrl?: string;
-    id: string | number;
-};
+import { Product } from 'types/product';
 
 export type SliderCarouselProps = {
-    items: CarouselItem[];
-    onItemClick: (item: CarouselItem) => void;
+    items: Product[];
+    onItemClick: (item: Product) => void;
 };
