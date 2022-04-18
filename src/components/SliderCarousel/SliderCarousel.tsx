@@ -1,15 +1,18 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { Product } from 'types/product';
 
-import { CarouselItem, SliderCarouselProps } from './SliderCarousel.types';
+import { SliderCarouselProps } from './SliderCarousel.types';
 
 import styles from './SliderCarousel.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-const Item = ({ title, description, imgUrl, onClick }: CarouselItem & { onClick: () => void }) => {
+type CarouselItemProps = Product & { onClick: () => void };
+
+const Item = ({ name: title, description, photo: imgUrl, onClick }: CarouselItemProps) => {
     return (
         <Card onClick={onClick} elevation={0} variant="outlined" className={cx('slider-carousel-item')}>
             <CardMedia
@@ -19,7 +22,6 @@ const Item = ({ title, description, imgUrl, onClick }: CarouselItem & { onClick:
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
                 <Typography variant="body1">{description}</Typography>
-                <Button className="CheckButton">Check it out!</Button>
             </CardContent>
         </Card>
     );
