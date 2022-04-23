@@ -2,14 +2,21 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Body_login_user_api_auth_login_post } from '../models/Body_login_user_api_auth_login_post';
-import type { ProfileUpdateSchema } from '../models/ProfileUpdateSchema';
-import type { ResendCodeRespSchema } from '../models/ResendCodeRespSchema';
-import type { ResendCodeSchema } from '../models/ResendCodeSchema';
-import type { SignupRespSchema } from '../models/SignupRespSchema';
-import type { SignupSchema } from '../models/SignupSchema';
-import type { TokenSchema } from '../models/TokenSchema';
-import type { UserSchema } from '../models/UserSchema';
-import type { VerifyCodeRequestSchema } from '../models/VerifyCodeRequestSchema';
+import type { ProductListRespDTO } from '../models/ProductListRespDTO';
+import type { ProductListSortByEnum } from '../models/ProductListSortByEnum';
+import type { ProductRespDTO } from '../models/ProductRespDTO';
+import type { ProfileUpdateReqDTO } from '../models/ProfileUpdateReqDTO';
+import type { ResendCodeReqDTO } from '../models/ResendCodeReqDTO';
+import type { ResendCodeRespDTO } from '../models/ResendCodeRespDTO';
+import type { ShopListRespDTO } from '../models/ShopListRespDTO';
+import type { ShopListSortByEnum } from '../models/ShopListSortByEnum';
+import type { ShopRespDTO } from '../models/ShopRespDTO';
+import type { SignupReqDTO } from '../models/SignupReqDTO';
+import type { SignupRespDTO } from '../models/SignupRespDTO';
+import type { SortOrderEnum } from '../models/SortOrderEnum';
+import type { TokenRespDTO } from '../models/TokenRespDTO';
+import type { UserRespDTO } from '../models/UserRespDTO';
+import type { VerifyCodeReqDTO } from '../models/VerifyCodeReqDTO';
 import type { VerifyCodeRespSchema } from '../models/VerifyCodeRespSchema';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -21,12 +28,12 @@ export class RootService {
     /**
      * Signup User
      * @param requestBody
-     * @returns SignupRespSchema Successful Response
+     * @returns SignupRespDTO Successful Response
      * @throws ApiError
      */
     public static signupUserApiAuthSignupPost(
-        requestBody: SignupSchema,
-    ): CancelablePromise<SignupRespSchema> {
+        requestBody: SignupReqDTO,
+    ): CancelablePromise<SignupRespDTO> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/signup',
@@ -41,12 +48,12 @@ export class RootService {
     /**
      * Login User
      * @param formData
-     * @returns TokenSchema Successful Response
+     * @returns TokenRespDTO Successful Response
      * @throws ApiError
      */
     public static loginUserApiAuthLoginPost(
         formData: Body_login_user_api_auth_login_post,
-    ): CancelablePromise<TokenSchema> {
+    ): CancelablePromise<TokenRespDTO> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/login',
@@ -60,10 +67,10 @@ export class RootService {
 
     /**
      * Current User
-     * @returns UserSchema Successful Response
+     * @returns UserRespDTO Successful Response
      * @throws ApiError
      */
-    public static currentUserApiAuthMeGet(): CancelablePromise<UserSchema> {
+    public static currentUserApiAuthMeGet(): CancelablePromise<UserRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/auth/me',
@@ -77,7 +84,7 @@ export class RootService {
      * @throws ApiError
      */
     public static verifyCodeApiAuthVerifyCodePost(
-        requestBody: VerifyCodeRequestSchema,
+        requestBody: VerifyCodeReqDTO,
     ): CancelablePromise<VerifyCodeRespSchema> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -93,12 +100,12 @@ export class RootService {
     /**
      * Resend Code
      * @param requestBody
-     * @returns ResendCodeRespSchema Successful Response
+     * @returns ResendCodeRespDTO Successful Response
      * @throws ApiError
      */
     public static resendCodeApiAuthResendCodePost(
-        requestBody: ResendCodeSchema,
-    ): CancelablePromise<ResendCodeRespSchema> {
+        requestBody: ResendCodeReqDTO,
+    ): CancelablePromise<ResendCodeRespDTO> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/resend_code',
@@ -113,17 +120,119 @@ export class RootService {
     /**
      * Patch
      * @param requestBody
-     * @returns UserSchema Successful Response
+     * @returns UserRespDTO Successful Response
      * @throws ApiError
      */
     public static patchApiProfilePatch(
-        requestBody: ProfileUpdateSchema,
-    ): CancelablePromise<UserSchema> {
+        requestBody: ProfileUpdateReqDTO,
+    ): CancelablePromise<UserRespDTO> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/profile/',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get By Name
+     * @param name
+     * @returns ProductRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getByNameApiProductsGet(
+        name: string,
+    ): CancelablePromise<ProductRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/products',
+            query: {
+                'name': name,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get List
+     * @param sortBy
+     * @param count
+     * @param offset
+     * @param order
+     * @returns ProductListRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getListApiProductsListGet(
+        sortBy: ProductListSortByEnum,
+        count: number,
+        offset: number,
+        order: SortOrderEnum,
+    ): CancelablePromise<ProductListRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/products.list',
+            query: {
+                'sort_by': sortBy,
+                'count': count,
+                'offset': offset,
+                'order': order,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get Shop
+     * @param id
+     * @returns ShopRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getShopApiShopGet(
+        id: number,
+    ): CancelablePromise<ShopRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/shop',
+            query: {
+                'id': id,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get List
+     * @param sortBy
+     * @param count
+     * @param offset
+     * @param order
+     * @returns ShopListRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getListApiShopListGet(
+        sortBy: ShopListSortByEnum,
+        count: number,
+        offset: number,
+        order: SortOrderEnum,
+    ): CancelablePromise<ShopListRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/shop.list',
+            query: {
+                'sort_by': sortBy,
+                'count': count,
+                'offset': offset,
+                'order': order,
+            },
             errors: {
                 422: `Validation Error`,
             },

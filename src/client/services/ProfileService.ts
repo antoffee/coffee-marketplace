@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ProfileUpdateSchema } from '../models/ProfileUpdateSchema';
-import type { UserSchema } from '../models/UserSchema';
+import type { ProfileUpdateReqDTO } from '../models/ProfileUpdateReqDTO';
+import type { UserRespDTO } from '../models/UserRespDTO';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -13,12 +13,12 @@ export class ProfileService {
     /**
      * Patch
      * @param requestBody
-     * @returns UserSchema Successful Response
+     * @returns UserRespDTO Successful Response
      * @throws ApiError
      */
     public static patchApiProfilePatch(
-        requestBody: ProfileUpdateSchema,
-    ): CancelablePromise<UserSchema> {
+        requestBody: ProfileUpdateReqDTO,
+    ): CancelablePromise<UserRespDTO> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/profile/',

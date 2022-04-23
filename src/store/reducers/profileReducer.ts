@@ -1,23 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {
-    AuthService,
-    // Body_login_user_api_auth_login_post,
-    ResendCodeSchema,
-    SignupSchema,
-    VerifyCodeRequestSchema,
-} from 'client';
+import { AuthService, ResendCodeReqDTO, SignupReqDTO, VerifyCodeReqDTO } from 'client';
 
 // First, create the thunk
-export const fetchSignup = createAsyncThunk('users/fetchSugnup', async (request: SignupSchema) => {
+export const fetchSignup = createAsyncThunk('users/fetchSugnup', async (request: SignupReqDTO) => {
     const response = await AuthService.signupUserApiAuthSignupPost(request);
     return response;
 });
-export const fetchVerifyCode = createAsyncThunk('users/fetchVerifyCode', async (request: VerifyCodeRequestSchema) => {
+export const fetchVerifyCode = createAsyncThunk('users/fetchVerifyCode', async (request: VerifyCodeReqDTO) => {
     const resp = await AuthService.verifyCodeApiAuthVerifyCodePost(request);
     return resp;
 });
 
-export const fetchResendCode = createAsyncThunk('users/fetchResendCode', async (request: ResendCodeSchema) => {
+export const fetchResendCode = createAsyncThunk('users/fetchResendCode', async (request: ResendCodeReqDTO) => {
     const response = await AuthService.resendCodeApiAuthResendCodePost(request);
     return response;
 });

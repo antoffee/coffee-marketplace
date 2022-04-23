@@ -2,6 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ResendCodeSchema = {
+export type ResendCodeRespDTO = {
     email: string;
 };

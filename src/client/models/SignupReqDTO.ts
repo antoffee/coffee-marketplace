@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ResendCodeRespSchema = {
+export type SignupReqDTO = {
+    password: string;
     email: string;
 };

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type TokenSchema = {
+export type TokenRespDTO = {
     access_token: string;
     token_type: string;
 };

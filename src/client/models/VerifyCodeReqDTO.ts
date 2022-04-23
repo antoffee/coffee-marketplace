@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type SignupRespSchema = {
+export type VerifyCodeReqDTO = {
     email: string;
+    code: string;
 };

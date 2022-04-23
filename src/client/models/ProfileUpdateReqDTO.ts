@@ -2,10 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type UserSchema = {
-    email: string;
-    created_at: string;
-    is_active: boolean;
+export type ProfileUpdateReqDTO = {
     name?: string;
     birthday?: string;
 };
