@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { AppBar, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { HomePage } from 'pages/HomePage';
+import { ProductDetailsPage } from 'pages/ProductDetailsPage';
 import { useAppDispatch } from 'store/hooks';
 import { fetchLoginUser } from 'store/reducers/profileReducer';
 
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
             />
             <Routes>
                 <Route path="/" caseSensitive element={<HomePage />}></Route>
+                <Route path="/product-details/:id" element={<ProductDetailsPage />}></Route>
             </Routes>
             <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
             <LoginPopup

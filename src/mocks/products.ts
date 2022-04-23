@@ -7,6 +7,7 @@ export const PRODUCT_MOCK: Product[] = [
         name: 'Random Name #1',
         description: 'Probably the most random thing you have ever seen!',
         price: 100,
+        category: 'Category',
     },
     {
         id: 2,
