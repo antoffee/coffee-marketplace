@@ -3,25 +3,29 @@ import { ProductListSortByEnum, ProductsService, SortOrderEnum } from 'client';
 import { Product } from 'types/product';
 
 type ProductListReqDTO = {
-    sortBy: ProductListSortByEnum;
+    shopId: number;
     count: number;
     offset: number;
-    order: SortOrderEnum;
+    sortBy?: ProductListSortByEnum;
+    order?: SortOrderEnum;
 };
 
 // First, create the thunk
 export const fetchProductList = createAsyncThunk(
     'products/fetchProductList',
-    async ({ sortBy, count, offset, order }: ProductListReqDTO) => {
-        const response = await ProductsService.getListApiProductsListGet(sortBy, count, offset, order);
+    async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
+        const response = await ProductsService.getListApiProductsListGet(shopId, count, offset, sortBy, order);
         return response;
     },
 );
 
-export const fetchProductDetails = createAsyncThunk('products/fetchProductDetails', async (name: string) => {
-    const resp = await ProductsService.getByNameApiProductsGet(name);
-    return resp;
-});
+export const fetchProductDetails = createAsyncThunk(
+    'products/fetchProductDetails',
+    async ({ productId, shopId }: { productId: number; shopId: number }) => {
+        const resp = await ProductsService.getByShopApiProductsGet(productId, shopId);
+        return resp;
+    },
+);
 
 interface ProductState {
     productList?: Product[];

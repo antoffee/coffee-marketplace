@@ -13,19 +13,22 @@ import { request as __request } from '../core/request';
 export class ProductsService {
 
     /**
-     * Get By Name
-     * @param name
+     * Get By Shop
+     * @param productId
+     * @param shopId
      * @returns ProductRespDTO Successful Response
      * @throws ApiError
      */
-    public static getByNameApiProductsGet(
-        name: string,
+    public static getByShopApiProductsGet(
+        productId: number,
+        shopId: number,
     ): CancelablePromise<ProductRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products',
             query: {
-                'name': name,
+                'product_id': productId,
+                'shop_id': shopId,
             },
             errors: {
                 422: `Validation Error`,
@@ -35,23 +38,26 @@ export class ProductsService {
 
     /**
      * Get List
-     * @param sortBy
+     * @param shopId
      * @param count
      * @param offset
+     * @param sortBy
      * @param order
      * @returns ProductListRespDTO Successful Response
      * @throws ApiError
      */
     public static getListApiProductsListGet(
-        sortBy: ProductListSortByEnum,
+        shopId: number,
         count: number,
         offset: number,
-        order: SortOrderEnum,
+        sortBy?: ProductListSortByEnum,
+        order?: SortOrderEnum,
     ): CancelablePromise<ProductListRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products.list',
             query: {
+                'shop_id': shopId,
                 'sort_by': sortBy,
                 'count': count,
                 'offset': offset,
