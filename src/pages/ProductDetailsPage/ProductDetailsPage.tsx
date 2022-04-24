@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { PRODUCT_MOCK } from 'mocks/products';
 import { EMPTY_IMAGE } from 'shared/constants';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { fetchProductDetails } from 'store/reducers/productReducer';
 
 import { ProductDetailsPageProps } from './ProductDetailsPage.types';
 
@@ -13,7 +14,20 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
     const params = useParams<{ id: string }>();
-    const product = PRODUCT_MOCK.find((item) => `${item.id}` === params.id);
+    const dispatch = useAppDispatch();
+    const {
+        productDetails: product,
+        productDetailsLoading,
+        productDetailsError,
+    } = useAppSelector((state) => state.products);
+    // const product = PRODUCT_MOCK.find((item) => `${item.id ?? ''}` === params.id);
+
+    useEffect(() => {
+        if (!productDetailsLoading && product?.id !== params.id && !productDetailsError) {
+            void dispatch(fetchProductDetails(`${params.id ?? ''}`));
+        }
+    }, [dispatch, params.id, product?.id, productDetailsError, productDetailsLoading]);
+
     return (
         <div className={cx('product-details-page', 'page')}>
             <Grid container columns={2} spacing={3}>
