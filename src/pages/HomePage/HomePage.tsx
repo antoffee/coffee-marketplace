@@ -7,6 +7,7 @@ import { SHOPS_MOCK } from 'mocks/shops';
 
 import { Catalog } from 'components/Catalog';
 import { SliderCarousel } from 'components/SliderCarousel';
+import { getShopAddress } from 'utils/getShopAddress';
 
 import { HomePageProps } from './HomePage.types';
 
@@ -22,14 +23,16 @@ export const HomePage: React.FC<HomePageProps> = () => {
     return (
         <div className={cx('home-page', 'page')}>
             {shownStores.map((item, i) => (
-                <>
-                    <h2>{item.name}</h2>
+                <React.Fragment key={item.id}>
+                    <Button variant="text" onClick={() => navigate(`/shop/${item.id ?? ''}`)}>
+                        <h2>{getShopAddress(item.address)}</h2>
+                    </Button>
                     <SliderCarousel
                         onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
                         items={PRODUCT_MOCK}
                         key={i}
                     />
-                </>
+                </React.Fragment>
             ))}
             {shownStores.length < SHOPS_MOCK.length && (
                 <Button onClick={() => setShownStores(SHOPS_MOCK)}>Показать больше магазинов</Button>

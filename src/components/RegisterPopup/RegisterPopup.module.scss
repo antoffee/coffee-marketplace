@@ -27,7 +27,7 @@
         background-color: #00000058;
         justify-content: center;
         align-items: center;
-        z-index: 10;
+        z-index: var(--popup-z-index);
 
         &.opened {
             display: flex;

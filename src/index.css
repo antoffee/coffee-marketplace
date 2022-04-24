@@ -1,3 +1,7 @@
+:root {
+    --popup-z-index: 10000000;
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
@@ -11,6 +15,7 @@ code {
 }
 
 .page {
+    padding-top: 80px;
     max-width: 1300px;
     margin-left: auto;
     margin-right: auto;
