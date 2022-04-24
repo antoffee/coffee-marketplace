@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { AccountBox, FavoriteBorder, Home, ShoppingBasket } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
+import { AppBar, Button, IconButton, Slide, Toolbar, useScrollTrigger } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useOutside } from 'hooks/useOutside';
 import { useAppSelector } from 'store/hooks';
@@ -19,39 +19,50 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
 
     const popover = useRef(null);
     useOutside(popover, () => setProfilePopoverOpened(false));
+
+    const trigger = useScrollTrigger({
+        disableHysteresis: true,
+        threshold: 20,
+        target: undefined,
+    });
+
     return (
-        <div className={cx('navbar')}>
-            <Home onClick={onLogoClick} />
-            <div className={cx('navbar-buttons')}>
-                {logged ? (
-                    <>
-                        <IconButton color="primary">
-                            <FavoriteBorder />
-                        </IconButton>
-                        <IconButton color="primary">
-                            <ShoppingBasket />
-                        </IconButton>
-                        <IconButton
-                            ref={popover}
-                            color="primary"
-                            onClick={() => setProfilePopoverOpened(true)}
-                            className={cx('profile-button')}
-                        >
-                            <ProfilePopover opened={profilePopoverOpened} />
-                            <AccountBox />
-                        </IconButton>
-                    </>
-                ) : (
-                    <>
-                        <Button variant="outlined" onClick={onLoginClick}>
-                            Войти
-                        </Button>
-                        <Button variant="contained" onClick={onRegisterClick}>
-                            Зарегистрироваться
-                        </Button>
-                    </>
-                )}
-            </div>
-        </div>
+        <Slide appear={true} direction="down" in={!trigger}>
+            <AppBar color="transparent" elevation={4} className={cx('navbar')}>
+                <Toolbar sx={{ width: '100%', columnGap: '12px' }}>
+                    <IconButton onClick={onLogoClick} sx={{ marginRight: 'auto' }}>
+                        <Home color="primary" />
+                    </IconButton>
+                    {logged ? (
+                        <>
+                            <IconButton color="primary">
+                                <FavoriteBorder />
+                            </IconButton>
+                            <IconButton color="primary">
+                                <ShoppingBasket />
+                            </IconButton>
+                            <IconButton
+                                ref={popover}
+                                color="primary"
+                                onClick={() => setProfilePopoverOpened(true)}
+                                className={cx('profile-button')}
+                            >
+                                <ProfilePopover opened={profilePopoverOpened} />
+                                <AccountBox />
+                            </IconButton>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="outlined" onClick={onLoginClick}>
+                                Войти
+                            </Button>
+                            <Button variant="contained" onClick={onRegisterClick}>
+                                Зарегистрироваться
+                            </Button>
+                        </>
+                    )}
+                </Toolbar>
+            </AppBar>
+        </Slide>
     );
 };
