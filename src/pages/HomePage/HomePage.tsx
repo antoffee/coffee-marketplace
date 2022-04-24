@@ -25,7 +25,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
                 <>
                     <h2>{item.name}</h2>
                     <SliderCarousel
-                        onItemClick={(item) => navigate(`/product-details/${item.id}`)}
+                        onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
                         items={PRODUCT_MOCK}
                         key={i}
                     />
@@ -37,7 +37,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
             <Typography variant="h4">Все товары</Typography>
             <Catalog
                 items={[...PRODUCT_MOCK, ...PRODUCT_MOCK]}
-                onItemClick={(item) => navigate(`/product-details/${item.id}`)}
+                onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
             />
         </div>
     );
