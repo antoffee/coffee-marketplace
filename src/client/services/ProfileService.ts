@@ -21,7 +21,7 @@ export class ProfileService {
     ): CancelablePromise<UserRespDTO> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/profile/',
+            url: '/api/profile',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

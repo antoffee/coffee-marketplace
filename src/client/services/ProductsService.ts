@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ProductListRespDTO } from '../models/ProductListRespDTO';
 import type { ProductListSortByEnum } from '../models/ProductListSortByEnum';
-import type { ProductRespDTO } from '../models/ProductRespDTO';
+import type { ShopProductDTO } from '../models/ShopProductDTO';
+import type { ShopProductsListDTO } from '../models/ShopProductsListDTO';
 import type { SortOrderEnum } from '../models/SortOrderEnum';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -16,13 +16,13 @@ export class ProductsService {
      * Get By Shop
      * @param productId
      * @param shopId
-     * @returns ProductRespDTO Successful Response
+     * @returns ShopProductDTO Successful Response
      * @throws ApiError
      */
     public static getByShopApiProductsGet(
         productId: number,
         shopId: number,
-    ): CancelablePromise<ProductRespDTO> {
+    ): CancelablePromise<ShopProductDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products',
@@ -43,7 +43,7 @@ export class ProductsService {
      * @param offset
      * @param sortBy
      * @param order
-     * @returns ProductListRespDTO Successful Response
+     * @returns ShopProductsListDTO Successful Response
      * @throws ApiError
      */
     public static getListApiProductsListGet(
@@ -52,7 +52,7 @@ export class ProductsService {
         offset: number,
         sortBy?: ProductListSortByEnum,
         order?: SortOrderEnum,
-    ): CancelablePromise<ProductListRespDTO> {
+    ): CancelablePromise<ShopProductsListDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products.list',

@@ -5,6 +5,7 @@
 /**
  * An enumeration.
  */
-export enum ShopListSortByEnum {
-    ID = 'id',
+export enum OrderReceiveKindEnum {
+    DELIVERY = 'delivery',
+    TAKEAWAY = 'takeaway',
 }

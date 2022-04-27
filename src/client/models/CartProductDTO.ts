@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ProductRespDTO = {
+export type CartProductDTO = {
     name: string;
     description?: string;
     price: number;

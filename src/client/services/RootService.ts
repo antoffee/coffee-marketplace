@@ -2,14 +2,19 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Body_login_user_api_auth_login_post } from '../models/Body_login_user_api_auth_login_post';
-import type { ProductListRespDTO } from '../models/ProductListRespDTO';
+import type { CartRespDTO } from '../models/CartRespDTO';
+import type { OrderListSortByEnum } from '../models/OrderListSortByEnum';
+import type { OrderReceiveKindEnum } from '../models/OrderReceiveKindEnum';
+import type { OrderRespDTO } from '../models/OrderRespDTO';
+import type { OrdersListRespDTO } from '../models/OrdersListRespDTO';
 import type { ProductListSortByEnum } from '../models/ProductListSortByEnum';
-import type { ProductRespDTO } from '../models/ProductRespDTO';
 import type { ProfileUpdateReqDTO } from '../models/ProfileUpdateReqDTO';
 import type { ResendCodeReqDTO } from '../models/ResendCodeReqDTO';
 import type { ResendCodeRespDTO } from '../models/ResendCodeRespDTO';
 import type { ShopListRespDTO } from '../models/ShopListRespDTO';
 import type { ShopListSortByEnum } from '../models/ShopListSortByEnum';
+import type { ShopProductDTO } from '../models/ShopProductDTO';
+import type { ShopProductsListDTO } from '../models/ShopProductsListDTO';
 import type { ShopRespDTO } from '../models/ShopRespDTO';
 import type { SignupReqDTO } from '../models/SignupReqDTO';
 import type { SignupRespDTO } from '../models/SignupRespDTO';
@@ -128,7 +133,7 @@ export class RootService {
     ): CancelablePromise<UserRespDTO> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/api/profile/',
+            url: '/api/profile',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -141,13 +146,13 @@ export class RootService {
      * Get By Shop
      * @param productId
      * @param shopId
-     * @returns ProductRespDTO Successful Response
+     * @returns ShopProductDTO Successful Response
      * @throws ApiError
      */
     public static getByShopApiProductsGet(
         productId: number,
         shopId: number,
-    ): CancelablePromise<ProductRespDTO> {
+    ): CancelablePromise<ShopProductDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products',
@@ -168,7 +173,7 @@ export class RootService {
      * @param offset
      * @param sortBy
      * @param order
-     * @returns ProductListRespDTO Successful Response
+     * @returns ShopProductsListDTO Successful Response
      * @throws ApiError
      */
     public static getListApiProductsListGet(
@@ -177,7 +182,7 @@ export class RootService {
         offset: number,
         sortBy?: ProductListSortByEnum,
         order?: SortOrderEnum,
-    ): CancelablePromise<ProductListRespDTO> {
+    ): CancelablePromise<ShopProductsListDTO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/products.list',
@@ -238,6 +243,117 @@ export class RootService {
                 'count': count,
                 'offset': offset,
                 'order': order,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get
+     * @param id
+     * @returns OrderRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getApiOrdersGet(
+        id: number,
+    ): CancelablePromise<OrderRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/orders',
+            query: {
+                'id': id,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Place Order
+     * @param shopId
+     * @param receiveKind
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static placeOrderApiOrdersPut(
+        shopId: number,
+        receiveKind?: OrderReceiveKindEnum,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/orders',
+            query: {
+                'shop_id': shopId,
+                'receive_kind': receiveKind,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get List
+     * @param count
+     * @param offset
+     * @param sortBy
+     * @param order
+     * @returns OrdersListRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getListApiOrdersListGet(
+        count: number,
+        offset: number,
+        sortBy?: OrderListSortByEnum,
+        order?: SortOrderEnum,
+    ): CancelablePromise<OrdersListRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/orders.list',
+            query: {
+                'sort_by': sortBy,
+                'count': count,
+                'offset': offset,
+                'order': order,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get
+     * @returns CartRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static getApiCartGet(): CancelablePromise<CartRespDTO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/cart',
+        });
+    }
+
+    /**
+     * Update
+     * @param productId
+     * @param qty
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static updateApiCartPatch(
+        productId: number,
+        qty: number,
+    ): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/cart',
+            query: {
+                'product_id': productId,
+                'qty': qty,
             },
             errors: {
                 422: `Validation Error`,

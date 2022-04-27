@@ -5,6 +5,7 @@
 /**
  * An enumeration.
  */
-export enum ShopListSortByEnum {
+export enum OrderListSortByEnum {
     ID = 'id',
+    CREATED_AT = 'created_at',
 }
