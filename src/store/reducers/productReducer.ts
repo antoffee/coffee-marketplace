@@ -87,5 +87,5 @@ const productSlice = createSlice({
     },
 });
 
-export const { resetProductState: logout } = productSlice.actions;
+export const { resetProductState } = productSlice.actions;
 export default productSlice.reducer;

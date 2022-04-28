@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { ShopListSortByEnum, SortOrderEnum } from 'client';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -62,21 +62,28 @@ export const HomePage: React.FC<HomePageProps> = () => {
     }, [scrollListener]);
 
     useEffect(() => {
-        shownStores?.forEach((store) => fetchProductList({ count: 4, offset: 0, shopId: store.id }));
-    }, [shownStores]);
+        shownStores?.forEach((store) => void dispatch(fetchProductList({ count: 4, offset: 0, shopId: store.id })));
+    }, [dispatch, shownStores]);
 
     return (
         <div className={cx('home-page', 'page')} ref={tableEl}>
-            {shownStores?.map((item, i) => (
-                <React.Fragment key={item.id}>
-                    <Button variant="text" onClick={() => navigate(`/shop/${item.id ?? ''}`)}>
-                        <h2>{getShopAddress(item.address)}</h2>
+            <Typography variant="h2">Добро пожаловать</Typography>
+            {shownStores?.map((store, i) => (
+                <React.Fragment key={store.id}>
+                    <Button variant="text" onClick={() => navigate(`/shop/${store.id ?? ''}`)}>
+                        <h2>{getShopAddress(store.address)}</h2>
                     </Button>
-                    <SliderCarousel
-                        onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
-                        items={productList?.find((prod) => prod.shopId === item.id)?.products ?? []}
-                        key={i}
-                    />
+                    {productList?.find((prod) => prod.shopId === store.id)?.products?.length ? (
+                        <SliderCarousel
+                            onItemClick={(item) =>
+                                navigate(`/product-details/${item.id ?? '1'}?shopId=${store.id ?? '0'}`)
+                            }
+                            items={productList?.find((prod) => prod.shopId === store.id)?.products ?? []}
+                            key={i}
+                        />
+                    ) : (
+                        <Typography variant="body1">В данном магазине на данный момент нет товаров</Typography>
+                    )}
                 </React.Fragment>
             ))}
         </div>

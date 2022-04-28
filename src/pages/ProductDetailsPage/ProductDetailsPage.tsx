@@ -15,7 +15,7 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
     const params = useParams<{ id: string }>();
     const [query] = useSearchParams();
-    const shopId = useMemo(() => Number(query.get('shop')), [query]);
+    const shopId = useMemo(() => Number(query.get('shopId')), [query]);
     const dispatch = useAppDispatch();
     const {
         productDetails: product,

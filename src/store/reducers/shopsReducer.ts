@@ -94,5 +94,5 @@ const shopsSlice = createSlice({
     },
 });
 
-export const { resetShopsState: logout } = shopsSlice.actions;
+export const { resetShopsState } = shopsSlice.actions;
 export default shopsSlice.reducer;

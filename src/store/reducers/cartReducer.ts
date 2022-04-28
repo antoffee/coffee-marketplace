@@ -1,91 +1,80 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ProductListSortByEnum, ProductsService, SortOrderEnum } from 'client';
+import { OrderListSortByEnum, OrderRespDTO, OrdersService, SortOrderEnum } from 'client';
 import { Product } from 'types/product';
 
-export type ProductListReqDTO = {
-    shopId: number;
+export type OrderListReqDTO = {
     count: number;
     offset: number;
-    sortBy?: ProductListSortByEnum;
+    sortBy?: OrderListSortByEnum;
     order?: SortOrderEnum;
 };
 
 // First, create the thunk
-export const fetchProductList = createAsyncThunk(
-    'products/fetchProductList',
-    async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
-        const response = await ProductsService.getListApiProductsListGet(shopId, count, offset, sortBy, order);
-        return { products: response.products, shopId, total: response.total };
+export const fetchOrderList = createAsyncThunk(
+    'cart/fetchOrderList',
+    async ({ sortBy, count, offset, order }: OrderListReqDTO) => {
+        const response = await OrdersService.getListApiOrdersListGet(count, offset, sortBy, order);
+        return response;
     },
 );
 
-export const fetchProductDetails = createAsyncThunk(
-    'products/fetchProductDetails',
-    async ({ productId, shopId }: { productId: number; shopId: number }) => {
-        const resp = await ProductsService.getByShopApiProductsGet(productId, shopId);
-        return resp;
-    },
-);
+export const fetchOrderDetails = createAsyncThunk('cart/fetchOrderDetails', async (id: number) => {
+    const resp = await OrdersService.getApiOrdersGet(id);
+    return resp;
+});
 
-interface ProductState {
-    productList: { shopId: number; products: Product[] }[];
-    productListLoading?: boolean;
-    currentProductListOffset: number;
-    productsListEndReached?: boolean;
-    productDetails?: Product;
-    productDetailsError?: string;
-    productDetailsLoading?: boolean;
+interface CartState {
+    orderList: OrderRespDTO[];
+    orderListLoading?: boolean;
+    orderListTotal: number;
+    orderListEndReached?: boolean;
+    orderDetails?: Product;
+    orderDetailsError?: string;
+    orderDetailsLoading?: boolean;
 }
 
 const initialState = {
-    productList: [],
-    currentProductListOffset: 0,
-} as ProductState;
+    orderList: [],
+    orderListTotal: 0,
+} as CartState;
 
 // Then, handle actions in your reducers:
 const productSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        resetProductState: () => initialState,
+        resetCartState: () => initialState,
         // standard reducer logic, with auto-generated action types per reducer
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(fetchProductList.pending, (state) => {
-            state.productListLoading = true;
+        builder.addCase(fetchOrderList.pending, (state) => {
+            state.orderListLoading = true;
         });
-        builder.addCase(fetchProductList.fulfilled, (state, action) => {
-            let productList = state.productList;
-            const index = productList.findIndex((item) => item.shopId === action.payload.shopId);
-            if (index >= 0) {
-                productList[index] = action.payload;
-            } else {
-                productList = productList.concat(action.payload);
-            }
-            state.productList = productList;
-            state.currentProductListOffset = productList.length;
-            state.productsListEndReached = productList.length >= action.payload.total;
-            state.productListLoading = false;
+        builder.addCase(fetchOrderList.fulfilled, (state, action) => {
+            state.orderList = action.payload.orders;
+            state.orderListTotal = action.payload.total;
+            state.orderListEndReached = action.payload.orders?.length >= action.payload.total;
+            state.orderListLoading = false;
         });
-        builder.addCase(fetchProductList.rejected, (state) => {
-            state.productListLoading = false;
+        builder.addCase(fetchOrderList.rejected, (state) => {
+            state.orderListLoading = false;
             // console.warn(action.error, action.meta);
         });
-        builder.addCase(fetchProductDetails.pending, (state) => {
-            state.productDetailsLoading = true;
-            state.productDetailsError = undefined;
+        builder.addCase(fetchOrderDetails.pending, (state) => {
+            state.orderDetailsLoading = true;
+            state.orderDetailsError = undefined;
         });
-        builder.addCase(fetchProductDetails.fulfilled, (state, action) => {
-            state.productDetailsLoading = false;
-            state.productDetails = action.payload;
+        builder.addCase(fetchOrderDetails.fulfilled, (state, action) => {
+            state.orderDetailsLoading = false;
+            state.orderDetails = action.payload;
         });
-        builder.addCase(fetchProductDetails.rejected, (state) => {
-            state.productDetailsLoading = false;
-            state.productDetailsError = 'error';
+        builder.addCase(fetchOrderDetails.rejected, (state) => {
+            state.orderDetailsLoading = false;
+            state.orderDetailsError = 'error';
         });
     },
 });
 
-export const { resetProductState: logout } = productSlice.actions;
+export const { resetCartState: logout } = productSlice.actions;
 export default productSlice.reducer;

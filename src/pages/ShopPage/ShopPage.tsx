@@ -29,18 +29,16 @@ export const ShopPage: React.FC<ShopPageProps> = () => {
 
     return (
         <div className={cx('home-page', 'page')}>
-            <Typography variant='h1'>Добро пожаловать</Typography>
-            {shopDetailsLoading ? (
-                <CircularProgress />
-            ) : (
+            {shopDetails?.address && (
                 <>
-                    <Typography>{getShopAddress(shopDetails?.address)}</Typography>
+                    <Typography variant="h3">{getShopAddress(shopDetails?.address)}</Typography>
                     <Catalog
                         items={shopProducts ?? []}
                         onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
                     />
                 </>
             )}
+            {shopDetailsLoading && <CircularProgress />}
         </div>
     );
 };
