@@ -7,7 +7,7 @@ export const PRODUCT_MOCK: Product[] = [
         name: 'Random Name #1',
         description: 'Probably the most random thing you have ever seen!',
         price: 100,
-        category: 'Category',
+        category: 'Category1',
     },
     {
         id: 2,
@@ -15,6 +15,7 @@ export const PRODUCT_MOCK: Product[] = [
         name: 'Random Name #2',
         description: 'Hello World!',
         price: 100,
+        category: 'Category2',
     },
     {
         id: 3,
@@ -22,6 +23,7 @@ export const PRODUCT_MOCK: Product[] = [
         description: 'Hello World!',
         photo: 'https://st.depositphotos.com/2632165/3063/i/600/depositphotos_30638835-stock-photo-coffee.jpg',
         price: 100,
+        category: 'Category2',
     },
     {
         id: 4,
@@ -29,12 +31,14 @@ export const PRODUCT_MOCK: Product[] = [
         description: 'Hello World!',
         photo: 'https://cdn.pixabay.com/photo/2017/05/12/08/29/coffee-2306471__340.jpg',
         price: 100,
+        category: 'Category2',
     },
     {
         id: 5,
-        name: 'Random Name #2',
+        name: 'Random Name #5',
         description: 'Hello World!',
         price: 100,
+        category: 'Category1',
     },
     { id: 6, name: 'Random Name #2', description: 'Hello World!', price: 100 },
     { id: 7, name: 'Random Name #2', description: 'Hello World!', price: 100 },

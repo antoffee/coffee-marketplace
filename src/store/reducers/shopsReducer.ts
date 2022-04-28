@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ShopListSortByEnum, ShopRespDTO, ShopService, SortOrderEnum } from 'client';
-import { PRODUCT_MOCK } from 'mocks/products';
+import { ProductsService, ShopListSortByEnum, ShopRespDTO, ShopService, SortOrderEnum } from 'client';
 import { Product } from 'types/product';
 
-import { sleep } from 'utils/sleep';
+import { ProductListReqDTO } from './productReducer';
 
-type ShopListReqDTO = {
+export type ShopListReqDTO = {
     sortBy: ShopListSortByEnum;
     count: number;
     offset: number;
@@ -26,21 +25,17 @@ export const fetchShopDetails = createAsyncThunk('shops/fetchShopDetails', async
     return resp;
 });
 
-export const fetchShopProducts = createAsyncThunk('shops/fetchShopProducts', async (id: number) => {
-    const resp = await sleep(
-        id
-            ? {
-                  products: PRODUCT_MOCK,
-              }
-            : {
-                  products: [],
-              },
-    );
-    return resp;
-});
+export const fetchShopProducts = createAsyncThunk(
+    'shops/fetchShopProducts',
+    async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
+        const response = await ProductsService.getListApiProductsListGet(shopId, count, offset, sortBy, order);
+        return response.products;
+    },
+);
 
 interface ShopsState {
     shopList?: ShopRespDTO[];
+    shopListEndReached?: boolean;
     shopListLoading?: boolean;
 
     shopDetailsError?: string;
@@ -90,7 +85,7 @@ const shopsSlice = createSlice({
         });
         builder.addCase(fetchShopProducts.fulfilled, (state, action) => {
             state.shopDetailsLoading = false;
-            state.shopProducts = action.payload.products;
+            state.shopProducts = action.payload;
         });
         builder.addCase(fetchShopProducts.rejected, (state) => {
             state.shopDetailsLoading = true;

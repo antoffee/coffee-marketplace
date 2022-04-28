@@ -23,7 +23,7 @@ export const ShopPage: React.FC<ShopPageProps> = () => {
     useEffect(() => {
         if (params.id) {
             void dispatch(fetchShopDetails(+params.id));
-            void dispatch(fetchShopProducts(+params.id));
+            void dispatch(fetchShopProducts({ shopId: +params.id, count: 100, offset: 0 }));
         }
     }, [dispatch, params.id]);
 
