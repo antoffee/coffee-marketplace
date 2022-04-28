@@ -14,6 +14,8 @@
         "stylelint:fix": "stylelint 'src/**/*.css' --fix",
         "generate-client": "openapi --input http://192.168.0.36:8080/openapi.json --output ./src/client --client axios"
     },
+    "os": ["darwin"],
+    "cpu": ["arm"],
     "dependencies": {
         "@emotion/react": "^11.8.1",
         "@emotion/styled": "^11.8.1",
@@ -63,21 +65,10 @@
         "typescript-plugin-css-modules": "^3.4.0"
     },
     "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
+        "extends": ["react-app", "react-app/jest"]
     },
     "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "production": [">0.2%", "not dead", "not op_mini all"],
+        "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
     }
 }
