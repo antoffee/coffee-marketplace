@@ -4,5 +4,6 @@ export type Product = {
     description?: string;
     category?: string | number;
     price?: number;
+    qty?: number;
     id?: string | number;
 };
