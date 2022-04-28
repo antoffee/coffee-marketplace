@@ -29,6 +29,7 @@ export const ShopPage: React.FC<ShopPageProps> = () => {
 
     return (
         <div className={cx('home-page', 'page')}>
+            <Typography variant='h1'>Добро пожаловать</Typography>
             {shopDetailsLoading ? (
                 <CircularProgress />
             ) : (

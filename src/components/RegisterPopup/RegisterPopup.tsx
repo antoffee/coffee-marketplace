@@ -4,7 +4,7 @@ import { Close } from '@mui/icons-material';
 import { Button, IconButton } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useAppDispatch } from 'store/hooks';
-import { fetchSignup } from 'store/reducers/profileReducer';
+import { fetchResendCode, fetchSignup, fetchVerifyCode } from 'store/reducers/profileReducer';
 
 import { CustomInputField } from 'components/Fields/CustomInputField';
 import { disableWindowScroll } from 'utils/disableWindowScroll';
@@ -22,6 +22,7 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
     const dispatch = useAppDispatch();
 
     const [step, setStep] = useState<0 | 1>(0);
+    const [resendDisabled, setResendDisabled] = useState(true);
 
     const handleSubmit = useCallback(
         (values: RegisterFormValues) => () => {
@@ -29,10 +30,11 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
                 case 0:
                     void dispatch(fetchSignup({ email: values.email, password: values.password }));
                     setStep(1);
+                    setTimeout(() => setResendDisabled(false), 10000);
                     break;
 
                 default:
-                    break;
+                    void dispatch(fetchVerifyCode({ code: values.code ?? '', email: values.email }));
             }
         },
         [dispatch, step],
@@ -52,6 +54,18 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
                             <CustomInputField type="password" required label="Повторите пароль" name="passwordRepeat" />
                             {step === 1 && (
                                 <CustomInputField required type="password" label="Код подтверждения" name="code" />
+                            )}
+                            {step === 1 && (
+                                <Button
+                                    disabled={resendDisabled}
+                                    onClick={() => {
+                                        void dispatch(fetchResendCode({ email: values.email }));
+                                        setResendDisabled(true);
+                                        setTimeout(() => setResendDisabled(false), 10000);
+                                    }}
+                                >
+                                    Отправить код повторно
+                                </Button>
                             )}
                             <Button disabled={!valid} variant="contained" onClick={handleSubmit(values)}>
                                 {step === 0 ? 'Отправить код подтверждения' : 'Зарегистрироваться'}
