@@ -1,7 +1,7 @@
 import { OrderStatusEnum } from 'client';
 
 export const getStatusColor = (
-    status: OrderStatusEnum,
+    status?: OrderStatusEnum,
 ): 'primary' | 'secondary' | 'default' | 'error' | 'info' | 'success' | 'warning' => {
     switch (status) {
         case OrderStatusEnum.CANCELLED:

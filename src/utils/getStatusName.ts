@@ -1,6 +1,6 @@
 import { OrderStatusEnum } from 'client';
 
-export const getStatusName = (status: OrderStatusEnum) => {
+export const getStatusName = (status?: OrderStatusEnum) => {
     switch (status) {
         case OrderStatusEnum.CANCELLED:
             return 'Отменен';

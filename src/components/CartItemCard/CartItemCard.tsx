@@ -21,7 +21,7 @@ import styles from './CartItemCard.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-export const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
+export const CartItemCard: React.FC<CartItemCardProps> = ({ item, viewOnly }) => {
     const dispatch = useAppDispatch();
     return (
         <ListItem sx={{ bgcolor: 'background.paper' }} style={{ display: 'flex' }} className={cx('cart-item')}>
@@ -45,12 +45,15 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item }) => {
                 <InputLabel id={`qty-select__label-${item.id ?? 0}`}>Количество</InputLabel>
 
                 <Select
+                    sx={{ minWidth: '200px' }}
                     labelId={`qty-select__label-${item.id ?? 0}`}
                     label="Количество"
-                    value={item.qty}
+                    value={item.qty ?? 1}
+                    readOnly={viewOnly}
+                    disabled={viewOnly}
                     onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}
                 >
-                    {Array.from({ length: item?.qty ?? 0 }, (_, index) => index + 1).map((qty) => (
+                    {Array.from({ length: item?.qty ?? 1 }, (_, index) => index + 1).map((qty) => (
                         <MenuItem key={qty} value={qty}>
                             {qty} шт
                         </MenuItem>

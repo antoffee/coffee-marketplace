@@ -60,7 +60,7 @@ interface CartState {
     orderListLoading?: boolean;
     orderListTotal: number;
     orderListEndReached?: boolean;
-    orderDetails?: Product;
+    orderDetails?: OrderRespDTO;
     orderDetailsError?: string;
     orderDetailsLoading?: boolean;
 
