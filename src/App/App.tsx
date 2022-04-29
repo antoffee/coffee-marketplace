@@ -4,6 +4,7 @@ import { AppBar, Box, createTheme, ThemeProvider, Typography } from '@mui/materi
 import cnBind, { Argument } from 'classnames/bind';
 import { CartPage } from 'pages/CartPage';
 import { HomePage } from 'pages/HomePage';
+import { OrdersListPage } from 'pages/OrdersListPage';
 import { ProductDetailsPage } from 'pages/ProductDetailsPage';
 import { ShopPage } from 'pages/ShopPage';
 import { useAppDispatch } from 'store/hooks';
@@ -54,6 +55,7 @@ export const App: React.FC = () => {
                     <Route path="/product-details/:id" element={<ProductDetailsPage />}></Route>
                     <Route path="/shop/:id" element={<ShopPage />}></Route>
                     <Route path="/cart" element={<CartPage />}></Route>
+                    <Route path="/orders" element={<OrdersListPage />}></Route>
                 </Routes>
                 <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
                 <LoginPopup
