@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { AppBar, Typography } from '@mui/material';
+import { AppBar, Box, createTheme, ThemeProvider, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { HomePage } from 'pages/HomePage';
 import { ProductDetailsPage } from 'pages/ProductDetailsPage';
@@ -22,28 +22,48 @@ export const App: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     return (
-        <div className={cx('App')}>
-            <AppBar />
-            <Navbar
-                onLoginClick={() => setLoginPopupOpened(true)}
-                onLogoClick={() => navigate('/')}
-                onRegisterClick={() => setRegisterPopupOpened(true)}
-            />
-            <Routes>
-                <Route path="/" caseSensitive element={<HomePage />}></Route>
-                <Route path="/product-details/:id" element={<ProductDetailsPage />}></Route>
-                <Route path="/shop/:id" element={<ShopPage />}></Route>
-            </Routes>
-            <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
-            <LoginPopup
-                onSubmit={(values) => {
-                    void dispatch(fetchLoginUser({ password: values.password, username: values.email }));
-                    setLoginPopupOpened(false);
-                }}
-                opened={loginPopupOpened}
-                onCloseClick={() => setLoginPopupOpened(false)}
-            />
-            <Typography />
-        </div>
+        <ThemeProvider
+            theme={createTheme({
+                palette: {
+                    mode: 'light',
+                    primary: {
+                        main: '#6b63c5',
+                        light: '#c4c1e8',
+                        dark: '#2b284f',
+                    },
+                    secondary: {
+                        main: '#5c6bc0',
+                    },
+                    background: {
+                        default: '#ebeced',
+                        paper: '#e3e3e4',
+                    },
+                },
+            })}
+        >
+            <Box minHeight="100vh" bgcolor={(theme) => theme.palette.background.default} className={cx('App')}>
+                <AppBar />
+                <Navbar
+                    onLoginClick={() => setLoginPopupOpened(true)}
+                    onLogoClick={() => navigate('/')}
+                    onRegisterClick={() => setRegisterPopupOpened(true)}
+                />
+                <Routes>
+                    <Route path="/" caseSensitive element={<HomePage />}></Route>
+                    <Route path="/product-details/:id" element={<ProductDetailsPage />}></Route>
+                    <Route path="/shop/:id" element={<ShopPage />}></Route>
+                </Routes>
+                <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
+                <LoginPopup
+                    onSubmit={(values) => {
+                        void dispatch(fetchLoginUser({ password: values.password, username: values.email }));
+                        setLoginPopupOpened(false);
+                    }}
+                    opened={loginPopupOpened}
+                    onCloseClick={() => setLoginPopupOpened(false)}
+                />
+                <Typography />
+            </Box>
+        </ThemeProvider>
     );
 };
