@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { AccountBox, FavoriteBorder, Home, ShoppingBasket } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import { AccountBox, Home, ShoppingBasket } from '@mui/icons-material';
 import { AppBar, Button, IconButton, Slide, Toolbar, useScrollTrigger } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useOutside } from 'hooks/useOutside';
@@ -35,12 +36,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
                     </IconButton>
                     {logged ? (
                         <>
-                            <IconButton color="primary">
-                                <FavoriteBorder />
-                            </IconButton>
-                            <IconButton color="primary">
-                                <ShoppingBasket />
-                            </IconButton>
+                            <Link to="/cart">
+                                <IconButton color="primary">
+                                    <ShoppingBasket />
+                                </IconButton>
+                            </Link>
                             <IconButton
                                 ref={popover}
                                 color="primary"

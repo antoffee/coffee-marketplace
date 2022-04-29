@@ -1,5 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { OrderListSortByEnum, OrderRespDTO, OrdersService, SortOrderEnum } from 'client';
+import {
+    CartProductDTO,
+    CartRespDTO,
+    CartService,
+    OrderListSortByEnum,
+    OrderReceiveKindEnum,
+    OrderRespDTO,
+    OrdersService,
+    SortOrderEnum,
+} from 'client';
 import { Product } from 'types/product';
 
 export type OrderListReqDTO = {
@@ -23,6 +32,29 @@ export const fetchOrderDetails = createAsyncThunk('cart/fetchOrderDetails', asyn
     return resp;
 });
 
+export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', async () => {
+    const resp = await CartService.getApiCartGet();
+    return resp;
+});
+
+export const fetchChangeQty = createAsyncThunk(
+    'cart/fetchChangeQty',
+    async ({ item, qty }: { item: Product; qty: number }) => {
+        const resp: CartRespDTO = (await CartService.updateApiCartPatch(item.id ?? -1, qty)) as unknown as CartRespDTO;
+        return resp;
+    },
+);
+
+export const fetchCreateOrder = createAsyncThunk(
+    'cart/fetchCreateOrder',
+    async ({ shopId, receiveKind }: { shopId: number; receiveKind?: OrderReceiveKindEnum }) => {
+        const response: { order_id: number } = (await OrdersService.placeOrderApiOrdersPut(shopId, receiveKind)) as {
+            order_id: number;
+        };
+        return response;
+    },
+);
+
 interface CartState {
     orderList: OrderRespDTO[];
     orderListLoading?: boolean;
@@ -31,6 +63,14 @@ interface CartState {
     orderDetails?: Product;
     orderDetailsError?: string;
     orderDetailsLoading?: boolean;
+
+    cart?: CartProductDTO[];
+    cartLoading?: boolean;
+    cartPrice?: number;
+    cartError?: string;
+
+    createOrderLoading?: boolean;
+    createdOrderId?: number;
 }
 
 const initialState = {
@@ -72,6 +112,47 @@ const productSlice = createSlice({
         builder.addCase(fetchOrderDetails.rejected, (state) => {
             state.orderDetailsLoading = false;
             state.orderDetailsError = 'error';
+        });
+        builder.addCase(fetchCartProducts.pending, (state) => {
+            state.cartLoading = true;
+            state.cartError = undefined;
+            state.createdOrderId = undefined;
+        });
+        builder.addCase(fetchCartProducts.fulfilled, (state, action) => {
+            state.cartLoading = false;
+            state.cart = action.payload.products;
+            state.cartPrice = action.payload.total_price;
+        });
+        builder.addCase(fetchCartProducts.rejected, (state) => {
+            state.cartLoading = false;
+            state.cartError = 'error';
+        });
+
+        builder.addCase(fetchChangeQty.pending, (state) => {
+            state.cartLoading = true;
+            state.cartError = undefined;
+        });
+        builder.addCase(fetchChangeQty.fulfilled, (state, action) => {
+            state.cartLoading = false;
+            state.cart = action.payload.products;
+            state.cartPrice = action.payload.total_price;
+        });
+        builder.addCase(fetchChangeQty.rejected, (state) => {
+            state.cartLoading = false;
+            state.cartError = 'error';
+        });
+
+        builder.addCase(fetchCreateOrder.pending, (state) => {
+            state.createOrderLoading = true;
+            state.cartError = undefined;
+        });
+        builder.addCase(fetchCreateOrder.fulfilled, (state, action) => {
+            state.createOrderLoading = false;
+            state.createdOrderId = action.payload.order_id;
+        });
+        builder.addCase(fetchCreateOrder.rejected, (state) => {
+            state.createOrderLoading = false;
+            state.cartError = 'error';
         });
     },
 });

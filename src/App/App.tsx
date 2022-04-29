@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AppBar, Box, createTheme, ThemeProvider, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { CartPage } from 'pages/CartPage';
 import { HomePage } from 'pages/HomePage';
 import { ProductDetailsPage } from 'pages/ProductDetailsPage';
 import { ShopPage } from 'pages/ShopPage';
@@ -52,6 +53,7 @@ export const App: React.FC = () => {
                     <Route path="/" caseSensitive element={<HomePage />}></Route>
                     <Route path="/product-details/:id" element={<ProductDetailsPage />}></Route>
                     <Route path="/shop/:id" element={<ShopPage />}></Route>
+                    <Route path="/cart" element={<CartPage />}></Route>
                 </Routes>
                 <RegisterPopup opened={registerPopupOpened} onCloseClick={() => setRegisterPopupOpened(false)} />
                 <LoginPopup

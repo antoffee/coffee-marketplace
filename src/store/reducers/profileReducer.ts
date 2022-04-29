@@ -20,7 +20,7 @@ export const fetchLoginUser = createAsyncThunk(
     'users/fetchLoginUser',
     async (request: { username: string; password: string }) => {
         const response = await AuthService.loginUserApiAuthLoginPost(request);
-        return response;
+        return { ...response, ...request };
     },
 );
 
@@ -92,8 +92,9 @@ const profileSlice = createSlice({
         builder.addCase(fetchLoginUser.pending, (state) => {
             state.authentificationLoading = true;
         });
-        builder.addCase(fetchLoginUser.fulfilled, (state) => {
-            state.authentificationLoading = true;
+        builder.addCase(fetchLoginUser.fulfilled, (state, action) => {
+            state.authentificationLoading = false;
+            state.userEmail = action.payload.username;
         });
     },
 });
