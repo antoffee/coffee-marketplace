@@ -20,6 +20,7 @@ export const fetchLoginUser = createAsyncThunk(
     'users/fetchLoginUser',
     async (request: { username: string; password: string }) => {
         const response = await AuthService.loginUserApiAuthLoginPost(request);
+        localStorage.setItem('authToken', response.access_token);
         return { ...response, ...request };
     },
 );
@@ -51,7 +52,10 @@ const profileSlice = createSlice({
         authentificate: () => {
             // state.authentificated = true;
         },
-        logout: () => initialState,
+        logout: () => {
+            localStorage.removeItem('authToken');
+            return initialState;
+        },
         // standard reducer logic, with auto-generated action types per reducer
     },
     extraReducers: (builder) => {
