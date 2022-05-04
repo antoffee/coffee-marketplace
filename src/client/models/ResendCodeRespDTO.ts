@@ -4,4 +4,5 @@
 
 export type ResendCodeRespDTO = {
     email: string;
+    seconds_left: number;
 };

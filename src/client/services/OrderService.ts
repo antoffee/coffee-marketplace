@@ -11,7 +11,7 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class OrdersService {
+export class OrderService {
 
     /**
      * Get
@@ -19,12 +19,12 @@ export class OrdersService {
      * @returns OrderRespDTO Successful Response
      * @throws ApiError
      */
-    public static getApiOrdersGet(
+    public static getApiOrderGet(
         id: number,
     ): CancelablePromise<OrderRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/orders',
+            url: '/api/order',
             query: {
                 'id': id,
             },
@@ -41,13 +41,13 @@ export class OrdersService {
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static placeOrderApiOrdersPut(
+    public static placeOrderApiOrderPut(
         shopId: number,
         receiveKind?: OrderReceiveKindEnum,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/api/orders',
+            url: '/api/order',
             query: {
                 'shop_id': shopId,
                 'receive_kind': receiveKind,
@@ -67,7 +67,7 @@ export class OrdersService {
      * @returns OrdersListRespDTO Successful Response
      * @throws ApiError
      */
-    public static getListApiOrdersListGet(
+    public static getListApiOrderListGet(
         count: number,
         offset: number,
         sortBy?: OrderListSortByEnum,
@@ -75,7 +75,7 @@ export class OrdersService {
     ): CancelablePromise<OrdersListRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/orders.list',
+            url: '/api/order.list',
             query: {
                 'sort_by': sortBy,
                 'count': count,

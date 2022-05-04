@@ -10,7 +10,7 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class ProductsService {
+export class ProductService {
 
     /**
      * Get By Shop
@@ -19,13 +19,13 @@ export class ProductsService {
      * @returns ShopProductDTO Successful Response
      * @throws ApiError
      */
-    public static getByShopApiProductsGet(
+    public static getByShopApiProductGet(
         productId: number,
         shopId: number,
     ): CancelablePromise<ShopProductDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/products',
+            url: '/api/product',
             query: {
                 'product_id': productId,
                 'shop_id': shopId,
@@ -46,7 +46,7 @@ export class ProductsService {
      * @returns ShopProductsListDTO Successful Response
      * @throws ApiError
      */
-    public static getListApiProductsListGet(
+    public static getListApiProductListGet(
         shopId: number,
         count: number,
         offset: number,
@@ -55,7 +55,7 @@ export class ProductsService {
     ): CancelablePromise<ShopProductsListDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/products.list',
+            url: '/api/product.list',
             query: {
                 'shop_id': shopId,
                 'sort_by': sortBy,

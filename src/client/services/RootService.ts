@@ -149,13 +149,13 @@ export class RootService {
      * @returns ShopProductDTO Successful Response
      * @throws ApiError
      */
-    public static getByShopApiProductsGet(
+    public static getByShopApiProductGet(
         productId: number,
         shopId: number,
     ): CancelablePromise<ShopProductDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/products',
+            url: '/api/product',
             query: {
                 'product_id': productId,
                 'shop_id': shopId,
@@ -176,7 +176,7 @@ export class RootService {
      * @returns ShopProductsListDTO Successful Response
      * @throws ApiError
      */
-    public static getListApiProductsListGet(
+    public static getListApiProductListGet(
         shopId: number,
         count: number,
         offset: number,
@@ -185,7 +185,7 @@ export class RootService {
     ): CancelablePromise<ShopProductsListDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/products.list',
+            url: '/api/product.list',
             query: {
                 'shop_id': shopId,
                 'sort_by': sortBy,
@@ -256,12 +256,12 @@ export class RootService {
      * @returns OrderRespDTO Successful Response
      * @throws ApiError
      */
-    public static getApiOrdersGet(
+    public static getApiOrderGet(
         id: number,
     ): CancelablePromise<OrderRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/orders',
+            url: '/api/order',
             query: {
                 'id': id,
             },
@@ -278,13 +278,13 @@ export class RootService {
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static placeOrderApiOrdersPut(
+    public static placeOrderApiOrderPut(
         shopId: number,
         receiveKind?: OrderReceiveKindEnum,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/api/orders',
+            url: '/api/order',
             query: {
                 'shop_id': shopId,
                 'receive_kind': receiveKind,
@@ -304,7 +304,7 @@ export class RootService {
      * @returns OrdersListRespDTO Successful Response
      * @throws ApiError
      */
-    public static getListApiOrdersListGet(
+    public static getListApiOrderListGet(
         count: number,
         offset: number,
         sortBy?: OrderListSortByEnum,
@@ -312,7 +312,7 @@ export class RootService {
     ): CancelablePromise<OrdersListRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/orders.list',
+            url: '/api/order.list',
             query: {
                 'sort_by': sortBy,
                 'count': count,

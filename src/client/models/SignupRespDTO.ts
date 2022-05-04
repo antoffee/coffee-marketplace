@@ -4,4 +4,5 @@
 
 export type SignupRespDTO = {
     email: string;
+    seconds_left: number;
 };

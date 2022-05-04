@@ -36,9 +36,8 @@ export type { VerifyCodeRespSchema } from './models/VerifyCodeRespSchema';
 
 export { AuthService } from './services/AuthService';
 export { CartService } from './services/CartService';
-export { OrdersService } from './services/OrdersService';
-export { ProductsService } from './services/ProductsService';
+export { OrderService } from './services/OrderService';
+export { ProductService } from './services/ProductService';
 export { ProfileService } from './services/ProfileService';
 export { RootService } from './services/RootService';
 export { ShopService } from './services/ShopService';
-export { UserService } from './services/UserService';

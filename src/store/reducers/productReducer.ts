@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ProductListSortByEnum, ProductsService, SortOrderEnum } from 'client';
+import { ProductListSortByEnum, ProductService, SortOrderEnum } from 'client';
 import { Product } from 'types/product';
 
 export type ProductListReqDTO = {
@@ -14,7 +14,7 @@ export type ProductListReqDTO = {
 export const fetchProductList = createAsyncThunk(
     'products/fetchProductList',
     async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
-        const response = await ProductsService.getListApiProductsListGet(shopId, count, offset, sortBy, order);
+        const response = await ProductService.getListApiProductListGet(shopId, count, offset, sortBy, order);
         return { products: response.products, shopId, total: response.total };
     },
 );
@@ -22,7 +22,7 @@ export const fetchProductList = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
     'products/fetchProductDetails',
     async ({ productId, shopId }: { productId: number; shopId: number }) => {
-        const resp = await ProductsService.getByShopApiProductsGet(productId, shopId);
+        const resp = await ProductService.getByShopApiProductGet(productId, shopId);
         return resp;
     },
 );

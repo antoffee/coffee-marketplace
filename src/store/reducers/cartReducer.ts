@@ -6,7 +6,7 @@ import {
     OrderListSortByEnum,
     OrderReceiveKindEnum,
     OrderRespDTO,
-    OrdersService,
+    OrderService,
     SortOrderEnum,
 } from 'client';
 import { Product } from 'types/product';
@@ -22,13 +22,13 @@ export type OrderListReqDTO = {
 export const fetchOrderList = createAsyncThunk(
     'cart/fetchOrderList',
     async ({ sortBy, count, offset, order }: OrderListReqDTO) => {
-        const response = await OrdersService.getListApiOrdersListGet(count, offset, sortBy, order);
+        const response = await OrderService.getListApiOrderListGet(count, offset, sortBy, order);
         return response;
     },
 );
 
 export const fetchOrderDetails = createAsyncThunk('cart/fetchOrderDetails', async (id: number) => {
-    const resp = await OrdersService.getApiOrdersGet(id);
+    const resp = await OrderService.getApiOrderGet(id);
     return resp;
 });
 
@@ -48,7 +48,7 @@ export const fetchChangeQty = createAsyncThunk(
 export const fetchCreateOrder = createAsyncThunk(
     'cart/fetchCreateOrder',
     async ({ shopId, receiveKind }: { shopId: number; receiveKind?: OrderReceiveKindEnum }) => {
-        const response: { order_id: number } = (await OrdersService.placeOrderApiOrdersPut(shopId, receiveKind)) as {
+        const response: { order_id: number } = (await OrderService.placeOrderApiOrderPut(shopId, receiveKind)) as {
             order_id: number;
         };
         return response;
