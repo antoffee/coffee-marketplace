@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Card, CardMedia, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { EMPTY_IMAGE } from 'shared/constants';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { fetchProductDetails } from 'store/reducers/productReducer';
+import { fetchChangeQty } from 'store/reducers/cartReducer';
+import { fetchProductDetails, fetchProductList } from 'store/reducers/productReducer';
 
 import { Catalog } from 'components/Catalog';
+import { formatImgUrl } from 'utils/formatImgUrl';
 
 import { ProductDetailsPageProps } from './ProductDetailsPage.types';
 
@@ -27,11 +29,21 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
         productList,
     } = useAppSelector((state) => state.products);
 
+    const { userEmail } = useAppSelector((state) => state.profile);
+
+    const [selectedQty, setSelectedQty] = useState(1);
+    
     useEffect(() => {
         if (params.id && !productDetailsError && shopId) {
             void dispatch(fetchProductDetails({ productId: +params.id, shopId }));
         }
     }, [dispatch, params.id, productDetailsError, shopId]);
+
+    useEffect(() => {
+        if (!productList?.find((item) => item.shopId === shopId)?.products) {
+            void dispatch(fetchProductList({ count: 10, offset: 0, shopId }));
+        }
+    }, [dispatch, productList, shopId]);
 
     return (
         <div className={cx('product-details-page', 'page')}>
@@ -41,7 +53,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                 <Grid container columns={2} spacing={3}>
                     <Grid item xs={1}>
                         <Card variant="elevation" raised={false}>
-                            <CardMedia component={'img'} image={product?.photo ?? EMPTY_IMAGE} />
+                            <CardMedia component={'img'} image={formatImgUrl(product?.photo) ?? EMPTY_IMAGE} />
                         </Card>
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={1}>
@@ -51,19 +63,34 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                             <Typography variant="body1">Описание: {product?.description}</Typography>
                         )}
                         <Typography variant="body1">Цена: {product?.price}₽</Typography>
-                        {product?.qty ? (
+                        {!!userEmail && (
                             <>
-                                <Select>
-                                    {Array.from({ length: product?.qty }, (_, index) => index + 1).map((qty) => (
-                                        <MenuItem key={qty} value={qty}>
-                                            {qty} шт
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <Button>Добавить в корзину</Button>
+                                {product?.qty ? (
+                                    <>
+                                        <Select<number>
+                                            defaultValue={1}
+                                            onChange={(e) => setSelectedQty(+e.target.value)}
+                                        >
+                                            {Array.from({ length: product?.qty }, (_, index) => index + 1).map(
+                                                (qty) => (
+                                                    <MenuItem key={qty} value={qty}>
+                                                        {qty} шт
+                                                    </MenuItem>
+                                                ),
+                                            )}
+                                        </Select>
+                                        <Button
+                                            onClick={() =>
+                                                void dispatch(fetchChangeQty({ item: product, qty: selectedQty }))
+                                            }
+                                        >
+                                            Добавить в корзину
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Typography color="red">Данный товар временно отсутствует в наличии</Typography>
+                                )}
                             </>
-                        ) : (
-                            <Typography color="red">Данный товар временно отсутствует в наличии</Typography>
                         )}
                     </Grid>
                 </Grid>

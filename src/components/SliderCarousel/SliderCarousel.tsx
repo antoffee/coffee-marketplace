@@ -2,7 +2,10 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { EMPTY_IMAGE } from 'shared/constants';
 import { Product } from 'types/product';
+
+import { formatImgUrl } from 'utils/formatImgUrl';
 
 import { SliderCarouselProps } from './SliderCarousel.types';
 
@@ -15,10 +18,7 @@ type CarouselItemProps = Product & { onClick: () => void };
 const Item = ({ name: title, description, photo: imgUrl, onClick }: CarouselItemProps) => {
     return (
         <Card onClick={onClick} elevation={0} variant="outlined" className={cx('slider-carousel-item')}>
-            <CardMedia
-                component={'img'}
-                image={imgUrl ?? 'https://webcolours.ca/wp-content/uploads/2020/10/webcolours-unknown.png'}
-            />
+            <CardMedia component={'img'} image={formatImgUrl(imgUrl) ?? EMPTY_IMAGE} />
             <CardContent>
                 <Typography variant="h5">{title}</Typography>
                 <Typography variant="body1">{description}</Typography>

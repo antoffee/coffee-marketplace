@@ -24,7 +24,7 @@ export const updateAxiosClientCredential = (accessToken: string) => {
 };
 
 instance.interceptors.response.use((res) => {
-    const { accessToken } = res.data;
+    const { access_token: accessToken } = res.data;
     if (accessToken) {
         updateAxiosClientCredential(accessToken);
     }

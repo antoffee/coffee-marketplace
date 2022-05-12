@@ -39,12 +39,19 @@ export const CartPage: React.FC<CartPageProps> = () => {
     const [receiveShopId, setReceiveShopId] = useState<number>();
 
     useEffect(() => {
-        void dispatch(fetchCartProducts());
-    }, [dispatch]);
+        const id = receiveShopId ?? shopList?.[0]?.id;
+        if (id) {
+            void dispatch(fetchCartProducts(id));
+        }
+    }, [dispatch, receiveShopId, shopList]);
 
     useEffect(() => {
-        void dispatch(fetchShopList({ count: 10, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }));
-    }, [dispatch]);
+        if (!shopList) {
+            void dispatch(
+                fetchShopList({ count: 10, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }),
+            );
+        }
+    }, [dispatch, shopList]);
 
     useEffect(() => {
         if (!userEmail) {
@@ -68,8 +75,9 @@ export const CartPage: React.FC<CartPageProps> = () => {
                     <Grid item xs={8}>
                         {cartLoading && <CircularProgress />}
                         {cart?.map((item) => (
-                            <CartItemCard key={item.name} item={item} />
+                            <CartItemCard key={item.product?.id} item={item} />
                         ))}
+                        {!cartLoading && !cart?.length && <Typography variant="h2">Корзина пуста</Typography>}
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
                         <Card sx={{ width: '100%' }}>
@@ -84,17 +92,22 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         }
                                         labelId="select-label"
                                         label="Способ доставки"
+                                        readOnly={!cart?.length}
+                                        disabled={!cart?.length}
                                     >
-                                        <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem>
-                                        <MenuItem value={OrderReceiveKindEnum.TAKEAWAY}>Самовывоз</MenuItem>
+                                        {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
+                                        <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl margin="dense" fullWidth>
                                     <InputLabel id="select-shop-label">Магазин для доставки</InputLabel>
                                     <Select<number>
+                                        defaultValue={shopList?.[0]?.id}
                                         onChange={(e) => setReceiveShopId(+e.target.value)}
                                         labelId="select-shop-label"
                                         label="Магазин для доставки"
+                                        readOnly={!cart?.length}
+                                        disabled={!cart?.length}
                                     >
                                         {shopList?.map((shop) => (
                                             <MenuItem key={shop.id} value={shop.id}>
@@ -104,7 +117,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                     </Select>
                                 </FormControl>
                                 <Button
-                                    disabled={!receiveKind || !receiveShopId}
+                                    disabled={!receiveKind || !receiveShopId || !cart?.length}
                                     onClick={() => {
                                         if (receiveShopId)
                                             void dispatch(fetchCreateOrder({ shopId: receiveShopId, receiveKind }));

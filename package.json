@@ -12,7 +12,7 @@
         "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json)\"",
         "stylelint": "stylelint 'src/**/*.css'",
         "stylelint:fix": "stylelint 'src/**/*.css' --fix",
-        "generate-client": "openapi --input http://192.168.0.36:8080/openapi.json --output ./src/client --client axios"
+        "generate-client": "openapi --input http://51.250.86.153/openapi.json --output ./src/client --client axios"
     },
     "os": [
         "darwin"

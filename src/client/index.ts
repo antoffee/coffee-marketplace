@@ -39,5 +39,4 @@ export { CartService } from './services/CartService';
 export { OrderService } from './services/OrderService';
 export { ProductService } from './services/ProductService';
 export { ProfileService } from './services/ProfileService';
-export { RootService } from './services/RootService';
 export { ShopService } from './services/ShopService';

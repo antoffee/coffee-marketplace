@@ -4,6 +4,7 @@ import cnBind, { Argument } from 'classnames/bind';
 import { EMPTY_IMAGE } from 'shared/constants';
 
 import { createUUID } from 'utils/createUUID';
+import { formatImgUrl } from 'utils/formatImgUrl';
 
 import { CatalogItemProps, CatalogProps } from './Catalog.types';
 
@@ -13,7 +14,7 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 const CatalogItemCard = ({ item, onClick }: CatalogItemProps) => (
     <Card className={cx('catalog-item')} onClick={onClick}>
-        <CardMedia component={'img'} image={item.photo ?? EMPTY_IMAGE}></CardMedia>
+        <CardMedia component={'img'} image={formatImgUrl(item.photo) ?? EMPTY_IMAGE}></CardMedia>
         <CardContent>
             <Typography variant="h6">{item.name}</Typography>
         </CardContent>

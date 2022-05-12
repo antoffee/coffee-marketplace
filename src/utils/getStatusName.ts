@@ -6,8 +6,8 @@ export const getStatusName = (status?: OrderStatusEnum) => {
             return 'Отменен';
         case OrderStatusEnum.COLLECTING:
             return 'На комплектации';
-        case OrderStatusEnum.CREATED:
-            return 'Создан';
+        // case OrderStatusEnum.CREATED:
+        //     return 'Создан';
         case OrderStatusEnum.DELIVERED:
             return 'Доставлен';
         case OrderStatusEnum.DELIVERING:

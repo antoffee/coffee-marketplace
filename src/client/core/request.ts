@@ -10,6 +10,7 @@ import type { ApiResult } from './ApiResult';
 import { CancelablePromise } from './CancelablePromise';
 import type { OnCancel } from './CancelablePromise';
 import type { OpenAPIConfig } from './OpenAPI';
+import axiosInstance from 'api/axios';
 
 const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
     return value !== undefined && value !== null;
@@ -59,7 +60,7 @@ const getQueryString = (params: Record<string, any>): string => {
     const process = (key: string, value: any) => {
         if (isDefined(value)) {
             if (Array.isArray(value)) {
-                value.forEach(v => {
+                value.forEach((v) => {
                     process(key, v);
                 });
             } else if (typeof value === 'object') {
@@ -118,7 +119,7 @@ const getFormData = (options: ApiRequestOptions): FormData | undefined => {
             .filter(([_, value]) => isDefined(value))
             .forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach(v => process(key, v));
+                    value.forEach((v) => process(key, v));
                 } else {
                     process(key, value);
                 }
@@ -138,12 +139,16 @@ const resolve = async <T>(options: ApiRequestOptions, resolver?: T | Resolver<T>
     return resolver;
 };
 
-const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptions, formData?: FormData): Promise<Record<string, string>> => {
+const getHeaders = async (
+    config: OpenAPIConfig,
+    options: ApiRequestOptions,
+    formData?: FormData,
+): Promise<Record<string, string>> => {
     const token = await resolve(options, config.TOKEN);
     const username = await resolve(options, config.USERNAME);
     const password = await resolve(options, config.PASSWORD);
     const additionalHeaders = await resolve(options, config.HEADERS);
-    const formHeaders = typeof formData?.getHeaders === 'function' && formData?.getHeaders() || {}
+    const formHeaders = (typeof formData?.getHeaders === 'function' && formData?.getHeaders()) || {};
 
     const headers = Object.entries({
         Accept: 'application/json',
@@ -151,11 +156,14 @@ const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptions, for
         ...options.headers,
         ...formHeaders,
     })
-    .filter(([_, value]) => isDefined(value))
-    .reduce((headers, [key, value]) => ({
-        ...headers,
-        [key]: String(value),
-    }), {} as Record<string, string>);
+        .filter(([_, value]) => isDefined(value))
+        .reduce(
+            (headers, [key, value]) => ({
+                ...headers,
+                [key]: String(value),
+            }),
+            {} as Record<string, string>,
+        );
 
     if (isStringWithValue(token)) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -183,7 +191,7 @@ const sendRequest = async <T>(
     body: any,
     formData: FormData | undefined,
     headers: Record<string, string>,
-    onCancel: OnCancel
+    onCancel: OnCancel,
 ): Promise<AxiosResponse<T>> => {
     const source = axios.CancelToken.source();
 
@@ -199,7 +207,7 @@ const sendRequest = async <T>(
     onCancel(() => source.cancel('The user aborted a request.'));
 
     try {
-        return await axios.request(requestConfig);
+        return await axiosInstance.request(requestConfig);
     } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response) {
@@ -236,7 +244,7 @@ const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): void =>
         502: 'Bad Gateway',
         503: 'Service Unavailable',
         ...options.errors,
-    }
+    };
 
     const error = errors[result.status];
     if (error) {

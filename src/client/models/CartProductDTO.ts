@@ -2,12 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ShopProductDTO } from './ShopProductDTO';
+
 export type CartProductDTO = {
-    id: number;
-    photo?: string;
-    name: string;
-    description?: string;
-    price: number;
-    category: string;
+    product: ShopProductDTO;
     qty: number;
+    price: number;
 };

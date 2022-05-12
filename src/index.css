@@ -15,8 +15,7 @@ code {
 }
 
 .page {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding: 80px 16px;
     max-width: 1300px;
     margin-left: auto;
     margin-right: auto;

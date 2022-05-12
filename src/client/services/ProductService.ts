@@ -13,13 +13,13 @@ import { request as __request } from '../core/request';
 export class ProductService {
 
     /**
-     * Get By Shop
+     * Get
      * @param productId
      * @param shopId
      * @returns ShopProductDTO Successful Response
      * @throws ApiError
      */
-    public static getByShopApiProductGet(
+    public static getApiProductGet(
         productId: number,
         shopId: number,
     ): CancelablePromise<ShopProductDTO> {
