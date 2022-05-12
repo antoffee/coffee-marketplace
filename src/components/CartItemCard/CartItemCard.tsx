@@ -15,6 +15,8 @@ import { EMPTY_IMAGE } from 'shared/constants';
 import { useAppDispatch } from 'store/hooks';
 import { fetchChangeQty } from 'store/reducers/cartReducer';
 
+import { formatImgUrl } from 'utils/formatImgUrl';
+
 import { CartItemCardProps } from './CartItemCard.types';
 
 import styles from './CartItemCard.module.scss';
@@ -26,7 +28,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: {price, produc
     return (
         <ListItem sx={{ bgcolor: 'background.paper' }} style={{ display: 'flex' }} className={cx('cart-item')}>
             <ListItemAvatar>
-                <Avatar src={(item.photo ?? EMPTY_IMAGE)} />
+                <Avatar src={(formatImgUrl(item.photo) ?? EMPTY_IMAGE)} />
             </ListItemAvatar>
             <ListItemText
                 primary={item.name}

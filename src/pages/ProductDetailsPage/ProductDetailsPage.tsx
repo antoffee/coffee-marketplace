@@ -4,7 +4,7 @@ import { Button, Card, CardMedia, CircularProgress, Grid, MenuItem, Select, Typo
 import cnBind, { Argument } from 'classnames/bind';
 import { EMPTY_IMAGE } from 'shared/constants';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { fetchProductDetails } from 'store/reducers/productReducer';
+import { fetchProductDetails, fetchProductList } from 'store/reducers/productReducer';
 
 import { Catalog } from 'components/Catalog';
 import { formatImgUrl } from 'utils/formatImgUrl';
@@ -34,6 +34,12 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
         }
     }, [dispatch, params.id, productDetailsError, shopId]);
 
+    useEffect(() => {
+        if (!productList?.find((item) => item.shopId === shopId)?.products) {
+            void dispatch(fetchProductList({ count: 10, offset: 0, shopId }));
+        }
+    }, [dispatch, productList, shopId]);
+
     return (
         <div className={cx('product-details-page', 'page')}>
             {productDetailsLoading ? (
@@ -54,7 +60,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                         <Typography variant="body1">Цена: {product?.price}₽</Typography>
                         {product?.qty ? (
                             <>
-                                <Select>
+                                <Select<number> defaultValue={1}>
                                     {Array.from({ length: product?.qty }, (_, index) => index + 1).map((qty) => (
                                         <MenuItem key={qty} value={qty}>
                                             {qty} шт
