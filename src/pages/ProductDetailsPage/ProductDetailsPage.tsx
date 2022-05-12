@@ -28,6 +28,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
         productList,
     } = useAppSelector((state) => state.products);
 
+    const { userEmail } = useAppSelector((state) => state.profile);
+
     useEffect(() => {
         if (params.id && !productDetailsError && shopId) {
             void dispatch(fetchProductDetails({ productId: +params.id, shopId }));
@@ -58,19 +60,25 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                             <Typography variant="body1">Описание: {product?.description}</Typography>
                         )}
                         <Typography variant="body1">Цена: {product?.price}₽</Typography>
-                        {product?.qty ? (
+                        {!!userEmail && (
                             <>
-                                <Select<number> defaultValue={1}>
-                                    {Array.from({ length: product?.qty }, (_, index) => index + 1).map((qty) => (
-                                        <MenuItem key={qty} value={qty}>
-                                            {qty} шт
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <Button>Добавить в корзину</Button>
+                                {product?.qty ? (
+                                    <>
+                                        <Select<number> defaultValue={1}>
+                                            {Array.from({ length: product?.qty }, (_, index) => index + 1).map(
+                                                (qty) => (
+                                                    <MenuItem key={qty} value={qty}>
+                                                        {qty} шт
+                                                    </MenuItem>
+                                                ),
+                                            )}
+                                        </Select>
+                                        <Button>Добавить в корзину</Button>
+                                    </>
+                                ) : (
+                                    <Typography color="red">Данный товар временно отсутствует в наличии</Typography>
+                                )}
                             </>
-                        ) : (
-                            <Typography color="red">Данный товар временно отсутствует в наличии</Typography>
                         )}
                     </Grid>
                 </Grid>

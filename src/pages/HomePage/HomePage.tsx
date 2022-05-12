@@ -26,8 +26,12 @@ export const HomePage: React.FC<HomePageProps> = () => {
     const { productList } = useAppSelector((state) => state.products);
 
     useEffect(() => {
-        void dispatch(fetchShopList({ sortBy: ShopListSortByEnum.ID, offset: 0, count: 10, order: SortOrderEnum.ASC }));
-    }, [dispatch]);
+        if (!shownStores) {
+            void dispatch(
+                fetchShopList({ sortBy: ShopListSortByEnum.ID, offset: 0, count: 10, order: SortOrderEnum.ASC }),
+            );
+        }
+    }, [dispatch, shownStores]);
 
     const [distanceBottom, setDistanceBottom] = useState(0);
     // hasMore should come from the place where you do the data fetching

@@ -70,6 +70,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                         {cart?.map((item) => (
                             <CartItemCard key={item.product?.id} item={item} />
                         ))}
+                        {!cartLoading && !cart?.length && <Typography variant="h2">Корзина пуста</Typography>}
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
                         <Card sx={{ width: '100%' }}>
@@ -84,6 +85,8 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         }
                                         labelId="select-label"
                                         label="Способ доставки"
+                                        readOnly={!cart?.length}
+                                        disabled={!cart?.length}
                                     >
                                         {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
                                         <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
@@ -95,6 +98,8 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         onChange={(e) => setReceiveShopId(+e.target.value)}
                                         labelId="select-shop-label"
                                         label="Магазин для доставки"
+                                        readOnly={!cart?.length}
+                                        disabled={!cart?.length}
                                     >
                                         {shopList?.map((shop) => (
                                             <MenuItem key={shop.id} value={shop.id}>
@@ -104,7 +109,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                     </Select>
                                 </FormControl>
                                 <Button
-                                    disabled={!receiveKind || !receiveShopId}
+                                    disabled={!receiveKind || !receiveShopId || !cart?.length}
                                     onClick={() => {
                                         if (receiveShopId)
                                             void dispatch(fetchCreateOrder({ shopId: receiveShopId, receiveKind }));
