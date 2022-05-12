@@ -20,7 +20,7 @@ export type OpenAPIConfig = {
 
 export const OpenAPI: OpenAPIConfig = {
     BASE: process.env.REACT_APP_BACKEND_URL ?? '',
-    VERSION: '0.1.0',
+    VERSION: '0.1.11',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',
     TOKEN: undefined,

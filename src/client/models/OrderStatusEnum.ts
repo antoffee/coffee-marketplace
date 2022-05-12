@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export enum OrderStatusEnum {
-    CREATED = 'created',
     COLLECTING = 'collecting',
     READY = 'ready',
     DELIVERING = 'delivering',

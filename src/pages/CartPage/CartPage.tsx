@@ -68,7 +68,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                     <Grid item xs={8}>
                         {cartLoading && <CircularProgress />}
                         {cart?.map((item) => (
-                            <CartItemCard key={item.name} item={item} />
+                            <CartItemCard key={item.product?.id} item={item} />
                         ))}
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
@@ -85,8 +85,8 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         labelId="select-label"
                                         label="Способ доставки"
                                     >
-                                        <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem>
-                                        <MenuItem value={OrderReceiveKindEnum.TAKEAWAY}>Самовывоз</MenuItem>
+                                        {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
+                                        <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl margin="dense" fullWidth>

@@ -11,27 +11,48 @@ export class CartService {
 
     /**
      * Get
+     * @param shopId
      * @returns CartRespDTO Successful Response
      * @throws ApiError
      */
-    public static getApiCartGet(): CancelablePromise<CartRespDTO> {
+    public static getApiCartGet(
+        shopId: number,
+    ): CancelablePromise<CartRespDTO> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/api/cart',
+            query: {
+                'shop_id': shopId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Delete
+     * @returns CartRespDTO Successful Response
+     * @throws ApiError
+     */
+    public static deleteApiCartDelete(): CancelablePromise<CartRespDTO> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
             url: '/api/cart',
         });
     }
 
     /**
-     * Update
+     * Patch
      * @param productId
      * @param qty
-     * @returns any Successful Response
+     * @returns CartRespDTO Successful Response
      * @throws ApiError
      */
-    public static updateApiCartPatch(
+    public static patchApiCartPatch(
         productId: number,
         qty: number,
-    ): CancelablePromise<any> {
+    ): CancelablePromise<CartRespDTO> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/cart',

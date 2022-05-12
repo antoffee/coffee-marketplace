@@ -8,8 +8,8 @@ export const getStatusColor = (
             return 'error';
         case OrderStatusEnum.COLLECTING:
             return 'info';
-        case OrderStatusEnum.CREATED:
-            return 'info';
+        // case OrderStatusEnum.CREATED:
+        //     return 'info';
         case OrderStatusEnum.DELIVERED:
             return 'success';
         case OrderStatusEnum.DELIVERING:

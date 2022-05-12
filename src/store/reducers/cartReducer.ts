@@ -33,14 +33,14 @@ export const fetchOrderDetails = createAsyncThunk('cart/fetchOrderDetails', asyn
 });
 
 export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', async () => {
-    const resp = await CartService.getApiCartGet();
+    const resp = await CartService.getApiCartGet(1);
     return resp;
 });
 
 export const fetchChangeQty = createAsyncThunk(
     'cart/fetchChangeQty',
     async ({ item, qty }: { item: Product; qty: number }) => {
-        const resp: CartRespDTO = (await CartService.updateApiCartPatch(item.id ?? -1, qty)) as unknown as CartRespDTO;
+        const resp: CartRespDTO = (await CartService.patchApiCartPatch(item.id ?? -1, qty)) as unknown as CartRespDTO;
         return resp;
     },
 );

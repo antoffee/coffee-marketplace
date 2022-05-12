@@ -21,12 +21,12 @@ import styles from './CartItemCard.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-export const CartItemCard: React.FC<CartItemCardProps> = ({ item, viewOnly }) => {
+export const CartItemCard: React.FC<CartItemCardProps> = ({ item: {price, product: item, qty}, viewOnly }) => {
     const dispatch = useAppDispatch();
     return (
         <ListItem sx={{ bgcolor: 'background.paper' }} style={{ display: 'flex' }} className={cx('cart-item')}>
             <ListItemAvatar>
-                <Avatar src={item.photo ?? EMPTY_IMAGE} />
+                <Avatar src={(item.photo ?? EMPTY_IMAGE)} />
             </ListItemAvatar>
             <ListItemText
                 primary={item.name}
@@ -36,7 +36,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item, viewOnly }) =>
                             {item.category}
                         </Typography>
                         <Typography>
-                            {(item.price ?? 0) * (item.qty ?? 0)}₽ ({item.price} ₽ х {item.qty} шт)
+                            {price}₽ ({item.price} ₽ х {qty} шт)
                         </Typography>
                     </React.Fragment>
                 }
@@ -48,7 +48,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item, viewOnly }) =>
                     sx={{ minWidth: '200px' }}
                     labelId={`qty-select__label-${item.id ?? 0}`}
                     label="Количество"
-                    value={item.qty ?? 1}
+                    value={qty ?? 1}
                     readOnly={viewOnly}
                     disabled={viewOnly}
                     onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}

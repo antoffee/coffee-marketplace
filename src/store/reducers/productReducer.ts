@@ -22,7 +22,7 @@ export const fetchProductList = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
     'products/fetchProductDetails',
     async ({ productId, shopId }: { productId: number; shopId: number }) => {
-        const resp = await ProductService.getByShopApiProductGet(productId, shopId);
+        const resp = await ProductService.getApiProductGet(productId, shopId);
         return resp;
     },
 );

@@ -47,7 +47,11 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                 <Grid width={'100%'} container spacing={3}>
                     <Grid item xs={8}>
                         {orderDetails?.products?.map((item) => (
-                            <CartItemCard viewOnly key={item.name} item={item} />
+                            <CartItemCard
+                                viewOnly
+                                key={item.name}
+                                item={{ product: item, price: item.price * item.qty, qty: item.qty }}
+                            />
                         ))}
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
