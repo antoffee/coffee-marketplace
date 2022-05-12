@@ -39,12 +39,19 @@ export const CartPage: React.FC<CartPageProps> = () => {
     const [receiveShopId, setReceiveShopId] = useState<number>();
 
     useEffect(() => {
-        void dispatch(fetchCartProducts());
-    }, [dispatch]);
+        const id = receiveShopId ?? shopList?.[0]?.id;
+        if (id) {
+            void dispatch(fetchCartProducts(id));
+        }
+    }, [dispatch, receiveShopId, shopList]);
 
     useEffect(() => {
-        void dispatch(fetchShopList({ count: 10, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }));
-    }, [dispatch]);
+        if (!shopList) {
+            void dispatch(
+                fetchShopList({ count: 10, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }),
+            );
+        }
+    }, [dispatch, shopList]);
 
     useEffect(() => {
         if (!userEmail) {
@@ -95,6 +102,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                 <FormControl margin="dense" fullWidth>
                                     <InputLabel id="select-shop-label">Магазин для доставки</InputLabel>
                                     <Select<number>
+                                        defaultValue={shopList?.[0]?.id}
                                         onChange={(e) => setReceiveShopId(+e.target.value)}
                                         labelId="select-shop-label"
                                         label="Магазин для доставки"

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Badge, Card, CardContent, CircularProgress, Grid, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { fetchCartProducts, fetchOrderDetails } from 'store/reducers/cartReducer';
+import { fetchOrderDetails } from 'store/reducers/cartReducer';
 
 import { CartItemCard } from 'components/CartItemCard';
 import { getReceiveName } from 'utils/getReceiveName';
@@ -22,10 +22,6 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
     const { orderDetails, orderDetailsLoading } = useAppSelector((state) => state.cart);
     const { userEmail } = useAppSelector((state) => state.profile);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        void dispatch(fetchCartProducts());
-    }, [dispatch]);
 
     useEffect(() => {
         if (!userEmail) {

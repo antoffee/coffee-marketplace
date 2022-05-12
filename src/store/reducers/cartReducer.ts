@@ -32,8 +32,8 @@ export const fetchOrderDetails = createAsyncThunk('cart/fetchOrderDetails', asyn
     return resp;
 });
 
-export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', async () => {
-    const resp = await CartService.getApiCartGet(1);
+export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', async (shopId: number) => {
+    const resp = await CartService.getApiCartGet(shopId);
     return resp;
 });
 

@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Card, CardMedia, CircularProgress, Grid, MenuItem, Select, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { EMPTY_IMAGE } from 'shared/constants';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { fetchChangeQty } from 'store/reducers/cartReducer';
 import { fetchProductDetails, fetchProductList } from 'store/reducers/productReducer';
 
 import { Catalog } from 'components/Catalog';
@@ -30,6 +31,8 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
 
     const { userEmail } = useAppSelector((state) => state.profile);
 
+    const [selectedQty, setSelectedQty] = useState(1);
+    
     useEffect(() => {
         if (params.id && !productDetailsError && shopId) {
             void dispatch(fetchProductDetails({ productId: +params.id, shopId }));
@@ -64,7 +67,10 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                             <>
                                 {product?.qty ? (
                                     <>
-                                        <Select<number> defaultValue={1}>
+                                        <Select<number>
+                                            defaultValue={1}
+                                            onChange={(e) => setSelectedQty(+e.target.value)}
+                                        >
                                             {Array.from({ length: product?.qty }, (_, index) => index + 1).map(
                                                 (qty) => (
                                                     <MenuItem key={qty} value={qty}>
@@ -73,7 +79,13 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                                                 ),
                                             )}
                                         </Select>
-                                        <Button>Добавить в корзину</Button>
+                                        <Button
+                                            onClick={() =>
+                                                void dispatch(fetchChangeQty({ item: product, qty: selectedQty }))
+                                            }
+                                        >
+                                            Добавить в корзину
+                                        </Button>
                                     </>
                                 ) : (
                                     <Typography color="red">Данный товар временно отсутствует в наличии</Typography>
