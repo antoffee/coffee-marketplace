@@ -44,6 +44,7 @@ export const fetchCheckAuthConnection = createAsyncThunk('users/fetchCheckAuthCo
 interface ProfileState {
     signUpLoading?: boolean;
     signUpError?: string;
+    secondsLeft?: number;
 
     verifyCodeLoading?: boolean;
     codeVerified?: boolean;
@@ -79,17 +80,22 @@ const profileSlice = createSlice({
         // Add reducers for additional action types here, and handle loading state as needed
         builder.addCase(fetchSignup.pending, (state) => {
             state.signUpLoading = true;
+            state.signUpError = undefined;
+            state.secondsLeft = undefined;
+
         });
-        builder.addCase(fetchSignup.fulfilled, (state) => {
+        builder.addCase(fetchSignup.fulfilled, (state, action) => {
             state.signUpLoading = false;
+            state.secondsLeft = action.payload.seconds_left;
         });
         builder.addCase(fetchSignup.rejected, (state, action) => {
             state.signUpLoading = false;
-            // console.warn(action.error, action.meta);
-            state.signUpError = action.error.message;
+            console.error('in fetchSignup', action.error, action.meta);
+            state.signUpError = (action.error as ApiError).statusText ?? action.error.message;
         });
         builder.addCase(fetchVerifyCode.pending, (state) => {
             state.verifyCodeLoading = true;
+            state.verifyCodeError = undefined;
         });
         builder.addCase(fetchVerifyCode.fulfilled, (state) => {
             state.verifyCodeLoading = false;
@@ -97,17 +103,21 @@ const profileSlice = createSlice({
         });
         builder.addCase(fetchVerifyCode.rejected, (state, action) => {
             state.verifyCodeLoading = false;
-            state.verifyCodeError = action.error.message;
+            state.verifyCodeError = (action.error as ApiError).statusText ?? action.error.message;
+            console.error('in fetchVerifyCode', action.error, action.meta);
         });
         builder.addCase(fetchResendCode.pending, (state) => {
             state.verifyCodeLoading = true;
+            state.verifyCodeError = undefined;
+            state.secondsLeft = undefined;
         });
-        builder.addCase(fetchResendCode.fulfilled, (state) => {
+        builder.addCase(fetchResendCode.fulfilled, (state, action) => {
             state.verifyCodeLoading = false;
+            state.secondsLeft = action.payload.seconds_left;
         });
-        builder.addCase(fetchResendCode.rejected, (state) => {
+        builder.addCase(fetchResendCode.rejected, (state, action) => {
             state.verifyCodeLoading = false;
-            state.verifyCodeError = 'Произошла ошибка при отправке кода';
+            state.verifyCodeError = (action.error as ApiError).statusText ?? action.error.message;
         });
 
         builder.addCase(fetchLoginUser.pending, (state) => {
