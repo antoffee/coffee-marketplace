@@ -248,11 +248,11 @@ const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): void =>
 
     const error = errors[result.status];
     if (error) {
-        throw new ApiError(result, error);
+        throw new ApiError(result, result.body?.detail?.description ?? error);
     }
 
     if (!result.ok) {
-        throw new ApiError(result, 'Generic Error');
+        throw new ApiError(result, result.body?.detail?.description ?? 'Generic Error');
     }
 };
 

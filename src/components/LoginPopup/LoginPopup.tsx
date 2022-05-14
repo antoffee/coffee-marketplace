@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form } from 'react-final-form';
 import { Close } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
+import { Alert, Button, IconButton } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { useAppSelector } from 'store/hooks';
 
 import { CustomInputField } from 'components/Fields/CustomInputField';
 import { disableWindowScroll } from 'utils/disableWindowScroll';
@@ -16,6 +17,13 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const LoginPopup: React.FC<LoginPopupProps> = ({ opened, onCloseClick, onSubmit }) => {
     disableWindowScroll(opened);
+    const { authentificateError, authentificationLoading, userEmail } = useAppSelector((state) => state.profile);
+
+    useEffect(() => {
+        if (!authentificateError && !authentificationLoading && userEmail) {
+            onCloseClick();
+        }
+    }, [authentificateError, authentificationLoading, onCloseClick, userEmail]);
 
     return (
         <div onClick={onCloseClick} className={cx('login-popup-wrapper', { opened })}>
@@ -34,6 +42,7 @@ export const LoginPopup: React.FC<LoginPopupProps> = ({ opened, onCloseClick, on
                         </form>
                     )}
                 </Form>
+                {authentificateError && <Alert severity="error">{authentificateError}</Alert>}
             </div>
         </div>
     );

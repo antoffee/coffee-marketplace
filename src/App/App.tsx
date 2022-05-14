@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AppBar, Box, createTheme, ThemeProvider, Typography } from '@mui/material';
+import { updateAxiosClientCredential } from 'api/axios';
 import cnBind, { Argument } from 'classnames/bind';
 import { CartPage } from 'pages/CartPage';
 import { HomePage } from 'pages/HomePage';
@@ -9,7 +10,7 @@ import { OrdersListPage } from 'pages/OrdersListPage';
 import { ProductDetailsPage } from 'pages/ProductDetailsPage';
 import { ShopPage } from 'pages/ShopPage';
 import { useAppDispatch } from 'store/hooks';
-import { fetchLoginUser } from 'store/reducers/profileReducer';
+import { fetchCheckAuthConnection, fetchLoginUser } from 'store/reducers/profileReducer';
 
 import { LoginPopup } from 'components/LoginPopup';
 import { Navbar } from 'components/Navbar';
@@ -24,6 +25,14 @@ export const App: React.FC = () => {
     const [loginPopupOpened, setLoginPopupOpened] = useState(false);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (localStorage.getItem('authToken') && localStorage.getItem('username')) {
+            updateAxiosClientCredential(localStorage.getItem('authToken') ?? undefined);
+            void dispatch(fetchCheckAuthConnection());
+        }
+    }, [dispatch]);
+
     return (
         <ThemeProvider
             theme={createTheme({
@@ -63,7 +72,6 @@ export const App: React.FC = () => {
                 <LoginPopup
                     onSubmit={(values) => {
                         void dispatch(fetchLoginUser({ password: values.password, username: values.email }));
-                        setLoginPopupOpened(false);
                     }}
                     opened={loginPopupOpened}
                     onCloseClick={() => setLoginPopupOpened(false)}
