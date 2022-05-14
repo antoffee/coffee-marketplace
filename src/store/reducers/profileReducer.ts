@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { AuthService, ResendCodeReqDTO, SignupReqDTO, VerifyCodeReqDTO } from 'client';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { updateAxiosClientCredential } from 'api/axios';
+import { ApiError, AuthService, ResendCodeReqDTO, SignupReqDTO, VerifyCodeReqDTO } from 'client';
 
 // First, create the thunk
 export const fetchSignup = createAsyncThunk('users/fetchSugnup', async (request: SignupReqDTO) => {
@@ -20,10 +21,25 @@ export const fetchLoginUser = createAsyncThunk(
     'users/fetchLoginUser',
     async (request: { username: string; password: string }) => {
         const response = await AuthService.loginUserApiAuthLoginPost(request);
-        localStorage.setItem('authToken', response.access_token);
+        if (response.access_token) {
+            localStorage.setItem('authToken', response.access_token);
+            localStorage.setItem('username', request.username);
+        }
         return { ...response, ...request };
     },
 );
+
+export const fetchCheckAuthConnection = createAsyncThunk('users/fetchCheckAuthConnection', async () => {
+    try {
+        const response = await AuthService.currentUserApiAuthMeGet();
+        return { ...response };
+    } catch (err) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
+        updateAxiosClientCredential(undefined);
+        console.error('in fetchCheckAuthConnection', err, (err as ApiError).statusText);
+    }
+});
 
 interface ProfileState {
     signUpLoading?: boolean;
@@ -49,11 +65,12 @@ const profileSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        authentificate: () => {
-            // state.authentificated = true;
+        authentificate: (state, action: PayloadAction<{ userEmail?: string }>) => {
+            state.userEmail = action.payload.userEmail;
         },
         logout: () => {
             localStorage.removeItem('authToken');
+            updateAxiosClientCredential(undefined);
             return initialState;
         },
         // standard reducer logic, with auto-generated action types per reducer
@@ -95,10 +112,19 @@ const profileSlice = createSlice({
 
         builder.addCase(fetchLoginUser.pending, (state) => {
             state.authentificationLoading = true;
+            state.authentificateError = undefined;
         });
         builder.addCase(fetchLoginUser.fulfilled, (state, action) => {
             state.authentificationLoading = false;
             state.userEmail = action.payload.username;
+        });
+        builder.addCase(fetchLoginUser.rejected, (state, action) => {
+            state.authentificationLoading = false;
+            state.authentificateError = action.error.message;
+        });
+        builder.addCase(fetchCheckAuthConnection.fulfilled, (state, action) => {
+            state.authentificationLoading = false;
+            state.userEmail = action.payload?.email;
         });
     },
 });

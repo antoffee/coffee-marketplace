@@ -8,7 +8,7 @@ const instance = axios.create({
 });
 let axiosCredentialInterceptorsId: number;
 
-export const updateAxiosClientCredential = (accessToken: string) => {
+export const updateAxiosClientCredential = (accessToken?: string) => {
     try {
         instance.interceptors.request.eject(axiosCredentialInterceptorsId);
     } catch (error) {
