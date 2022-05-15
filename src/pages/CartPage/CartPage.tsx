@@ -94,6 +94,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         label="Способ доставки"
                                         readOnly={!cart?.length}
                                         disabled={!cart?.length}
+                                        MenuProps={{ style: { maxHeight: 500 } }}
                                     >
                                         {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
                                         <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
@@ -108,6 +109,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         label="Магазин для доставки"
                                         readOnly={!cart?.length}
                                         disabled={!cart?.length}
+                                        MenuProps={{ style: { maxHeight: 500 } }}
                                     >
                                         {shopList?.map((shop) => (
                                             <MenuItem key={shop.id} value={shop.id}>

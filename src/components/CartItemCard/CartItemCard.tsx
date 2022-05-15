@@ -23,12 +23,12 @@ import styles from './CartItemCard.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-export const CartItemCard: React.FC<CartItemCardProps> = ({ item: {price, product: item, qty}, viewOnly }) => {
+export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, product: item, qty }, viewOnly }) => {
     const dispatch = useAppDispatch();
     return (
         <ListItem sx={{ bgcolor: 'background.paper' }} style={{ display: 'flex' }} className={cx('cart-item')}>
             <ListItemAvatar>
-                <Avatar src={(formatImgUrl(item.photo) ?? EMPTY_IMAGE)} />
+                <Avatar src={formatImgUrl(item.photo) ?? EMPTY_IMAGE} />
             </ListItemAvatar>
             <ListItemText
                 primary={item.name}
@@ -47,6 +47,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: {price, produc
                 <InputLabel id={`qty-select__label-${item.id ?? 0}`}>Количество</InputLabel>
 
                 <Select
+                    MenuProps={{ style: { maxHeight: 500 } }}
                     sx={{ minWidth: '200px' }}
                     labelId={`qty-select__label-${item.id ?? 0}`}
                     label="Количество"
