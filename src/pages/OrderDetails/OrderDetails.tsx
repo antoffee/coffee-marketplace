@@ -62,6 +62,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                                 </Typography>
                                 <Typography variant="subtitle2">Статус:</Typography>
                                 <Badge
+                                    sx={{ width: 'auto', height: 'auto' }}
                                     badgeContent={getStatusName(orderDetails?.status)}
                                     color={getStatusColor(orderDetails?.status)}
                                 ></Badge>
