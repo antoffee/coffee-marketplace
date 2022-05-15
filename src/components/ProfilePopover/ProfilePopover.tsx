@@ -11,14 +11,21 @@ import styles from './ProfilePopover.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-export const ProfilePopover: React.FC<ProfilePopoverProps> = ({ opened }) => {
+export const ProfilePopover: React.FC<ProfilePopoverProps> = ({ opened, handleClose }) => {
     const dispatch = useAppDispatch();
 
     return (
         <div className={cx('profile-popover', { opened })}>
-            <Button onClick={() => dispatch(logout())}>Выйти</Button>
+            <Button
+                onClick={() => {
+                    handleClose();
+                    dispatch(logout());
+                }}
+            >
+                Выйти
+            </Button>
             <Link to={`/orders`}>
-                <Button>Просмотреть список заказов</Button>
+                <Button onClick={handleClose}>Просмотреть список заказов</Button>
             </Link>
         </div>
     );
