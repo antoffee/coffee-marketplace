@@ -14,10 +14,10 @@ import {
     Typography,
 } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { OrderReceiveKindEnum, ShopListSortByEnum, SortOrderEnum } from 'client';
+import { OrderReceiveKindEnum, ShopListRespDTO, ShopListSortByEnum, SortOrderEnum } from 'client';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchCartProducts, fetchCreateOrder } from 'store/reducers/cartReducer';
-import { fetchShopList } from 'store/reducers/shopsReducer';
+import { fetchAllShopList } from 'store/reducers/shopsReducer';
 
 import { CartItemCard } from 'components/CartItemCard';
 import { getShopAddress } from 'utils/getShopAddress';
@@ -46,12 +46,12 @@ export const CartPage: React.FC<CartPageProps> = () => {
     }, [dispatch, receiveShopId, shopList]);
 
     useEffect(() => {
-        if (!shopList) {
-            void dispatch(
-                fetchShopList({ count: 10, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }),
-            );
-        }
-    }, [dispatch, shopList]);
+        void dispatch(
+            fetchAllShopList({ count: 20, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }),
+        ).then(({ payload }) => {
+            setReceiveShopId((payload as ShopListRespDTO)?.shops?.[0]?.id);
+        });
+    }, [dispatch]);
 
     useEffect(() => {
         if (!userEmail) {

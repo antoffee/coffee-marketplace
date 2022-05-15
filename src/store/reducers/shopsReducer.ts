@@ -20,6 +20,14 @@ export const fetchShopList = createAsyncThunk(
     },
 );
 
+export const fetchAllShopList = createAsyncThunk(
+    'shops/fetchAllShopList',
+    async ({ sortBy, offset, order }: ShopListReqDTO) => {
+        const response = await ShopService.getListApiShopListGet(sortBy, 100, offset, order);
+        return response;
+    },
+);
+
 export const fetchShopDetails = createAsyncThunk('shops/fetchShopDetails', async (id: number) => {
     const resp = await ShopService.getShopApiShopGet(id);
     return resp;
@@ -70,6 +78,18 @@ const shopsSlice = createSlice({
             state.shopListLoading = false;
         });
         builder.addCase(fetchShopList.rejected, (state) => {
+            state.shopListLoading = false;
+            // console.warn(action.error, action.meta);
+        });
+        builder.addCase(fetchAllShopList.pending, (state) => {
+            state.shopListLoading = true;
+        });
+        builder.addCase(fetchAllShopList.fulfilled, (state, action) => {
+            state.shopList = action.payload.shops;
+            state.shopListEndReached = true;
+            state.shopListLoading = false;
+        });
+        builder.addCase(fetchAllShopList.rejected, (state) => {
             state.shopListLoading = false;
             // console.warn(action.error, action.meta);
         });
