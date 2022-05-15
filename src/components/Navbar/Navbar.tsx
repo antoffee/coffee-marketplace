@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { AccountBox, Home, ShoppingBasket } from '@mui/icons-material';
 import { AppBar, Button, IconButton, Slide, Toolbar, useScrollTrigger } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
@@ -27,6 +27,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
         target: undefined,
     });
 
+    const location = useLocation();
+
+    useEffect(() => {
+        if (!logged) {
+            setProfilePopoverOpened(false);
+        }
+    }, [logged]);
+
+    useEffect(() => {
+        setProfilePopoverOpened(false);
+    }, [location.pathname]);
+
     return (
         <Slide appear={true} direction="down" in={!trigger}>
             <AppBar color="transparent" elevation={4} className={cx('navbar')}>
@@ -47,7 +59,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
                                 onClick={() => setProfilePopoverOpened(true)}
                                 className={cx('profile-button')}
                             >
-                                <ProfilePopover opened={profilePopoverOpened} />
+                                <ProfilePopover
+                                    handleClose={() => setProfilePopoverOpened(false)}
+                                    opened={profilePopoverOpened}
+                                />
                                 <AccountBox />
                             </IconButton>
                         </>

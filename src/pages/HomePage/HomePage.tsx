@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography } from '@mui/material';
+import { Button, debounce, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { ShopListSortByEnum, SortOrderEnum } from 'client';
+import { useEmergenceTracking } from 'hooks/useEmergenceTracking';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchProductList } from 'store/reducers/productReducer';
 import { fetchShopList } from 'store/reducers/shopsReducer';
+import { AppDispatch } from 'store/store';
 
 import { SliderCarousel } from 'components/SliderCarousel';
 import { getShopAddress } from 'utils/getShopAddress';
@@ -21,56 +23,47 @@ const MIN_SHOWN_STORES = 2;
 export const HomePage: React.FC<HomePageProps> = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const tableEl = useRef<HTMLDivElement>(null);
-    const { shopList: shownStores } = useAppSelector((state) => state.shops);
+    const { shopList: shownStores, shopListEndReached, shopListLoading } = useAppSelector((state) => state.shops);
     const { productList } = useAppSelector((state) => state.products);
 
+    const { isVisible, visibilityRef } = useEmergenceTracking();
+
+    const offsetRef = useRef<number>(0);
+
+    const debouncedLoader = useMemo(
+        () =>
+            debounce(
+                (dispatch: AppDispatch, isVisible: boolean, shopListEndReached: boolean, shopListLoading: boolean) => {
+                    if (isVisible && !shopListEndReached && !shopListLoading) {
+                        void dispatch(
+                            fetchShopList({
+                                sortBy: ShopListSortByEnum.ID,
+                                offset: offsetRef.current,
+                                count: MIN_SHOWN_STORES,
+                                order: SortOrderEnum.ASC,
+                            }),
+                        );
+                    }
+                },
+                100,
+            ),
+        [],
+    );
+
     useEffect(() => {
-        if (!shownStores) {
-            void dispatch(
-                fetchShopList({ sortBy: ShopListSortByEnum.ID, offset: 0, count: 10, order: SortOrderEnum.ASC }),
-            );
-        }
-    }, [dispatch, shownStores]);
-
-    const [distanceBottom, setDistanceBottom] = useState(0);
-    // hasMore should come from the place where you do the data fetching
-    // for example, it could be a prop passed from the parent component
-    // or come from some store
-    const scrollListener = useCallback(() => {
-        if (tableEl?.current) {
-            const bottom = tableEl?.current?.scrollHeight - tableEl?.current?.clientHeight;
-            // if you want to change distanceBottom every time new data is loaded
-            // don't use the if statement
-            if (!distanceBottom) {
-                // calculate distanceBottom that works for you
-                setDistanceBottom(Math.round((bottom / 100) * 20));
-            }
-            if (tableEl.current.scrollTop > bottom - distanceBottom) {
-                fetchShopList({
-                    count: MIN_SHOWN_STORES,
-                    offset: shownStores?.length ?? 0,
-                    order: SortOrderEnum.ASC,
-                    sortBy: ShopListSortByEnum.ID,
-                });
-            }
-        }
-    }, [distanceBottom, shownStores?.length]);
-
-    useLayoutEffect(() => {
-        const tableRef = tableEl.current;
-        tableRef?.addEventListener('scroll', scrollListener);
-        return () => {
-            tableRef?.removeEventListener('scroll', scrollListener);
-        };
-    }, [scrollListener]);
+        debouncedLoader(dispatch, !!isVisible, !!shopListEndReached, !!shopListLoading);
+    }, [debouncedLoader, dispatch, isVisible, shopListEndReached, shopListLoading]);
 
     useEffect(() => {
         shownStores?.forEach((store) => void dispatch(fetchProductList({ count: 4, offset: 0, shopId: store.id })));
     }, [dispatch, shownStores]);
 
+    useEffect(() => {
+        offsetRef.current = shownStores?.length ?? 0;
+    }, [shownStores?.length]);
+
     return (
-        <div className={cx('home-page', 'page')} ref={tableEl}>
+        <div className={cx('home-page', 'page')}>
             <Typography variant="h2">Добро пожаловать</Typography>
             {shownStores?.map((store, i) => (
                 <React.Fragment key={store.id}>
@@ -90,6 +83,7 @@ export const HomePage: React.FC<HomePageProps> = () => {
                     )}
                 </React.Fragment>
             ))}
+            <div ref={visibilityRef} />
         </div>
     );
 };

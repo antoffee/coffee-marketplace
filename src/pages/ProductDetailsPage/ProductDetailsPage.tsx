@@ -32,7 +32,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
     const { userEmail } = useAppSelector((state) => state.profile);
 
     const [selectedQty, setSelectedQty] = useState(1);
-    
+
     useEffect(() => {
         if (params.id && !productDetailsError && shopId) {
             void dispatch(fetchProductDetails({ productId: +params.id, shopId }));
@@ -53,7 +53,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                 <Grid container columns={2} spacing={3}>
                     <Grid item xs={1}>
                         <Card variant="elevation" raised={false}>
-                            <CardMedia component={'img'} image={formatImgUrl(product?.photo) ?? EMPTY_IMAGE} />
+                            <CardMedia
+                                sx={{
+                                    maxHeight: 400,
+                                    objectFit: 'contain',
+                                }}
+                                component={'img'}
+                                image={formatImgUrl(product?.photo) ?? EMPTY_IMAGE}
+                            />
                         </Card>
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={1}>
@@ -65,13 +72,16 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                         <Typography variant="body1">Цена: {product?.price}₽</Typography>
                         {!!userEmail && (
                             <>
-                                {product?.qty ? (
+                                {product?.availability ? (
                                     <>
                                         <Select<number>
+                                            MenuProps={{ style: { maxHeight: 500 } }}
+                                            inputMode="numeric"
                                             defaultValue={1}
+                                            maxRows={10}
                                             onChange={(e) => setSelectedQty(+e.target.value)}
                                         >
-                                            {Array.from({ length: product?.qty }, (_, index) => index + 1).map(
+                                            {Array.from({ length: product?.availability }, (_, index) => index + 1).map(
                                                 (qty) => (
                                                     <MenuItem key={qty} value={qty}>
                                                         {qty} шт

@@ -34,7 +34,7 @@ export const ShopPage: React.FC<ShopPageProps> = () => {
                     <Typography variant="h3">{getShopAddress(shopDetails?.address)}</Typography>
                     <Catalog
                         items={shopProducts ?? []}
-                        onItemClick={(item) => navigate(`/product-details/${item.id ?? ''}`)}
+                        onItemClick={(item) => navigate(`/product-details/${item.id ?? '1'}?shopId=${params.id ?? '0'}`)}
                     />
                 </>
             )}

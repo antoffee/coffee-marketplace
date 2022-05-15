@@ -45,7 +45,7 @@ export const OrdersListPage: React.FC<OrdersListPageProps> = () => {
                                 secondary={
                                     <List>
                                         <Badge
-                                            sx={{ marginLeft: '40px' }}
+                                            sx={{ marginLeft: '40px', width: 'auto', height: 'auto' }}
                                             badgeContent={getStatusName(item.status)}
                                             color={getStatusColor(item.status)}
                                         ></Badge>

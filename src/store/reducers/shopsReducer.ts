@@ -20,6 +20,14 @@ export const fetchShopList = createAsyncThunk(
     },
 );
 
+export const fetchAllShopList = createAsyncThunk(
+    'shops/fetchAllShopList',
+    async ({ sortBy, offset, order }: ShopListReqDTO) => {
+        const response = await ShopService.getListApiShopListGet(sortBy, 100, offset, order);
+        return response;
+    },
+);
+
 export const fetchShopDetails = createAsyncThunk('shops/fetchShopDetails', async (id: number) => {
     const resp = await ShopService.getShopApiShopGet(id);
     return resp;
@@ -45,7 +53,10 @@ interface ShopsState {
     shopProducts?: Product[];
 }
 
-const initialState = {} as ShopsState;
+const initialState = {
+    shopListEndReached: false,
+    shopListLoading: false,
+} as ShopsState;
 
 // Then, handle actions in your reducers:
 const shopsSlice = createSlice({
@@ -61,10 +72,24 @@ const shopsSlice = createSlice({
             state.shopListLoading = true;
         });
         builder.addCase(fetchShopList.fulfilled, (state, action) => {
-            state.shopList = action.payload.shops;
+            state.shopList = (state.shopList ?? []).concat(action.payload.shops);
+            state.shopListEndReached =
+                action.payload.total === state.shopList?.length ?? 0 + action.payload.shops?.length;
             state.shopListLoading = false;
         });
         builder.addCase(fetchShopList.rejected, (state) => {
+            state.shopListLoading = false;
+            // console.warn(action.error, action.meta);
+        });
+        builder.addCase(fetchAllShopList.pending, (state) => {
+            state.shopListLoading = true;
+        });
+        builder.addCase(fetchAllShopList.fulfilled, (state, action) => {
+            state.shopList = action.payload.shops;
+            state.shopListEndReached = true;
+            state.shopListLoading = false;
+        });
+        builder.addCase(fetchAllShopList.rejected, (state) => {
             state.shopListLoading = false;
             // console.warn(action.error, action.meta);
         });
