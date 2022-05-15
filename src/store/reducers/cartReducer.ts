@@ -22,7 +22,7 @@ export type OrderListReqDTO = {
 export const fetchOrderList = createAsyncThunk(
     'cart/fetchOrderList',
     async ({ sortBy, count, offset, order }: OrderListReqDTO) => {
-        const response = await OrderService.getListApiOrderListGet(count, offset, sortBy, order);
+        const response = await OrderService.getListApiOrderListGet(sortBy, count, offset, order);
         return response;
     },
 );

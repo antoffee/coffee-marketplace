@@ -14,7 +14,7 @@ export type ProductListReqDTO = {
 export const fetchProductList = createAsyncThunk(
     'products/fetchProductList',
     async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
-        const response = await ProductService.getListApiProductListGet(shopId, count, offset, sortBy, order);
+        const response = await ProductService.getListApiProductListGet(shopId, sortBy, count, offset, order);
         return { products: response.products, shopId, total: response.total };
     },
 );

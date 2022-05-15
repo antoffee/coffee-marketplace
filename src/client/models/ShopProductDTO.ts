@@ -9,5 +9,5 @@ export type ShopProductDTO = {
     description?: string;
     price: number;
     category: string;
-    qty: number;
+    availability: number;
 };

@@ -15,7 +15,7 @@ export type ShopListReqDTO = {
 export const fetchShopList = createAsyncThunk(
     'shops/fetchShopList',
     async ({ sortBy, count, offset, order }: ShopListReqDTO) => {
-        const response = await ShopService.getListApiShopListGet(count, offset, sortBy, order);
+        const response = await ShopService.getListApiShopListGet(sortBy, count, offset, order);
         return response;
     },
 );
@@ -28,7 +28,7 @@ export const fetchShopDetails = createAsyncThunk('shops/fetchShopDetails', async
 export const fetchShopProducts = createAsyncThunk(
     'shops/fetchShopProducts',
     async ({ shopId, sortBy, count, offset, order }: ProductListReqDTO) => {
-        const response = await ProductService.getListApiProductListGet(shopId, count, offset, sortBy, order);
+        const response = await ProductService.getListApiProductListGet(shopId, sortBy, count, offset, order);
         return response.products;
     },
 );

@@ -35,17 +35,17 @@ export class ShopService {
 
     /**
      * Get List
+     * @param sortBy
      * @param count
      * @param offset
-     * @param sortBy
      * @param order
      * @returns ShopListRespDTO Successful Response
      * @throws ApiError
      */
     public static getListApiShopListGet(
-        count: number,
-        offset: number,
         sortBy?: ShopListSortByEnum,
+        count: number = 10,
+        offset?: number,
         order?: SortOrderEnum,
     ): CancelablePromise<ShopListRespDTO> {
         return __request(OpenAPI, {

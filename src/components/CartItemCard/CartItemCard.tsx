@@ -55,7 +55,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: {price, produc
                     disabled={viewOnly}
                     onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}
                 >
-                    {Array.from({ length: item?.qty ?? 1 }, (_, index) => index + 1).map((qty) => (
+                    {Array.from({ length: item?.availability ?? 1 }, (_, index) => index + 1).map((qty) => (
                         <MenuItem key={qty} value={qty}>
                             {qty} шт
                         </MenuItem>
