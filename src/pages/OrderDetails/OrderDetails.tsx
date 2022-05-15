@@ -46,7 +46,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                             <CartItemCard
                                 viewOnly
                                 key={item.name}
-                                item={{ product: item, price: item.price * item.qty, qty: item.qty }}
+                                item={{ product: item, price: item.price * item.availability, qty: item.availability }}
                             />
                         ))}
                     </Grid>

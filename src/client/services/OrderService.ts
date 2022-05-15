@@ -60,17 +60,17 @@ export class OrderService {
 
     /**
      * Get List
+     * @param sortBy
      * @param count
      * @param offset
-     * @param sortBy
      * @param order
      * @returns OrdersListRespDTO Successful Response
      * @throws ApiError
      */
     public static getListApiOrderListGet(
-        count: number,
-        offset: number,
         sortBy?: OrderListSortByEnum,
+        count: number = 10,
+        offset?: number,
         order?: SortOrderEnum,
     ): CancelablePromise<OrdersListRespDTO> {
         return __request(OpenAPI, {
