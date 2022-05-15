@@ -53,7 +53,14 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
                 <Grid container columns={2} spacing={3}>
                     <Grid item xs={1}>
                         <Card variant="elevation" raised={false}>
-                            <CardMedia component={'img'} image={formatImgUrl(product?.photo) ?? EMPTY_IMAGE} />
+                            <CardMedia
+                                sx={{
+                                    maxHeight: 400,
+                                    objectFit: 'contain',
+                                }}
+                                component={'img'}
+                                image={formatImgUrl(product?.photo) ?? EMPTY_IMAGE}
+                            />
                         </Card>
                     </Grid>
                     <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={1}>
