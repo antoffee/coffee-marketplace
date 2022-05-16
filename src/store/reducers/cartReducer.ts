@@ -9,6 +9,7 @@ import {
     OrderService,
     SortOrderEnum,
 } from 'client';
+import { RootState } from 'store/store';
 import { Product } from 'types/product';
 
 export type OrderListReqDTO = {
@@ -39,8 +40,13 @@ export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', asyn
 
 export const fetchChangeQty = createAsyncThunk(
     'cart/fetchChangeQty',
-    async ({ item, qty }: { item: Product; qty: number }) => {
-        const resp: CartRespDTO = (await CartService.patchApiCartPatch(item.id ?? -1, qty)) as unknown as CartRespDTO;
+    async ({ item, qty }: { item: Product; qty: number }, thunkApi) => {
+        const state = thunkApi.getState() as RootState;
+        const resp: CartRespDTO = (await CartService.patchApiCartPatch(
+            state.cart.selectedShopId ?? 1,
+            item.id ?? -1,
+            qty,
+        )) as unknown as CartRespDTO;
         return resp;
     },
 );
@@ -71,11 +77,13 @@ interface CartState {
 
     createOrderLoading?: boolean;
     createdOrderId?: number;
+    selectedShopId?: number;
 }
 
 const initialState = {
     orderList: [],
     orderListTotal: 0,
+    selectedShopId: 1,
 } as CartState;
 
 // Then, handle actions in your reducers:
