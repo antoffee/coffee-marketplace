@@ -49,7 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
                     </IconButton>
                     {logged ? (
                         <>
-                            {location.pathname !== '/cart' && <ShopSelect />}
+                            {location.pathname !== '/cart' && !location.pathname.includes('/orders') && <ShopSelect />}
                             <Link to="/cart">
                                 <IconButton color="primary">
                                     <ShoppingBasket />
