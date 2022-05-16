@@ -44,12 +44,14 @@ export class CartService {
 
     /**
      * Patch
+     * @param shopId
      * @param productId
      * @param qty
      * @returns CartRespDTO Successful Response
      * @throws ApiError
      */
     public static patchApiCartPatch(
+        shopId: number,
         productId: number,
         qty: number,
     ): CancelablePromise<CartRespDTO> {
@@ -57,6 +59,7 @@ export class CartService {
             method: 'PATCH',
             url: '/api/cart',
             query: {
+                'shop_id': shopId,
                 'product_id': productId,
                 'qty': qty,
             },

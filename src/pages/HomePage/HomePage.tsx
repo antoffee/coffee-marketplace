@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, debounce, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { ShopListSortByEnum, SortOrderEnum } from 'client';
 import { useEmergenceTracking } from 'hooks/useEmergenceTracking';
+import { useInfiniteShopsLoading } from 'hooks/useInfiniteShopsLoading';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchProductList } from 'store/reducers/productReducer';
-import { fetchShopList } from 'store/reducers/shopsReducer';
-import { AppDispatch } from 'store/store';
 
 import { SliderCarousel } from 'components/SliderCarousel';
 import { getShopAddress } from 'utils/getShopAddress';
@@ -18,49 +16,19 @@ import styles from './HomePage.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-const MIN_SHOWN_STORES = 2;
-
 export const HomePage: React.FC<HomePageProps> = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { shopList: shownStores, shopListEndReached, shopListLoading } = useAppSelector((state) => state.shops);
+    const { shopList: shownStores } = useAppSelector((state) => state.shops);
     const { productList } = useAppSelector((state) => state.products);
 
     const { isVisible, visibilityRef } = useEmergenceTracking();
-
-    const offsetRef = useRef<number>(0);
-
-    const debouncedLoader = useMemo(
-        () =>
-            debounce(
-                (dispatch: AppDispatch, isVisible: boolean, shopListEndReached: boolean, shopListLoading: boolean) => {
-                    if (isVisible && !shopListEndReached && !shopListLoading) {
-                        void dispatch(
-                            fetchShopList({
-                                sortBy: ShopListSortByEnum.ID,
-                                offset: offsetRef.current,
-                                count: MIN_SHOWN_STORES,
-                                order: SortOrderEnum.ASC,
-                            }),
-                        );
-                    }
-                },
-                100,
-            ),
-        [],
-    );
-
-    useEffect(() => {
-        debouncedLoader(dispatch, !!isVisible, !!shopListEndReached, !!shopListLoading);
-    }, [debouncedLoader, dispatch, isVisible, shopListEndReached, shopListLoading]);
 
     useEffect(() => {
         shownStores?.forEach((store) => void dispatch(fetchProductList({ count: 4, offset: 0, shopId: store.id })));
     }, [dispatch, shownStores]);
 
-    useEffect(() => {
-        offsetRef.current = shownStores?.length ?? 0;
-    }, [shownStores?.length]);
+    useInfiniteShopsLoading(isVisible);
 
     return (
         <div className={cx('home-page', 'page')}>

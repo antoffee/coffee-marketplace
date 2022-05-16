@@ -1,7 +1,9 @@
 import React from 'react';
+import { Delete } from '@mui/icons-material';
 import {
     Avatar,
     FormControl,
+    IconButton,
     InputLabel,
     ListItem,
     ListItemAvatar,
@@ -48,7 +50,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
 
                 <Select
                     MenuProps={{ style: { maxHeight: 500 } }}
-                    sx={{ minWidth: '200px' }}
+                    sx={{ minWidth: '200px', mr: '10px' }}
                     labelId={`qty-select__label-${item.id ?? 0}`}
                     label="Количество"
                     value={qty ?? 1}
@@ -63,6 +65,9 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
                     ))}
                 </Select>
             </FormControl>
+            <IconButton onClick={() => void dispatch(fetchChangeQty({ item, qty: 0 }))}>
+                <Delete />
+            </IconButton>
         </ListItem>
     );
 };

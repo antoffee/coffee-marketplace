@@ -7,6 +7,7 @@ import { useOutside } from 'hooks/useOutside';
 import { useAppSelector } from 'store/hooks';
 
 import { ProfilePopover } from 'components/ProfilePopover';
+import { ShopSelect } from 'components/ShopSelect';
 
 import { NavbarProps } from './Navbar.types';
 
@@ -48,6 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onLoginClick, onLogoClick, onReg
                     </IconButton>
                     {logged ? (
                         <>
+                            {location.pathname !== '/cart' && <ShopSelect />}
                             <Link to="/cart">
                                 <IconButton color="primary">
                                     <ShoppingBasket />

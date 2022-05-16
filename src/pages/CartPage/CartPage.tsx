@@ -14,13 +14,12 @@ import {
     Typography,
 } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
-import { OrderReceiveKindEnum, ShopListRespDTO, ShopListSortByEnum, SortOrderEnum } from 'client';
+import { OrderReceiveKindEnum } from 'client';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchCartProducts, fetchCreateOrder } from 'store/reducers/cartReducer';
-import { fetchAllShopList } from 'store/reducers/shopsReducer';
 
 import { CartItemCard } from 'components/CartItemCard';
-import { getShopAddress } from 'utils/getShopAddress';
+import { ShopSelect } from 'components/ShopSelect';
 
 import { CartPageProps } from './CartPage.types';
 
@@ -30,28 +29,26 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const CartPage: React.FC<CartPageProps> = () => {
     const dispatch = useAppDispatch();
-    const { cart, cartPrice, cartLoading, createOrderLoading, createdOrderId } = useAppSelector((state) => state.cart);
+    const { cart, cartPrice, cartLoading, createOrderLoading, createdOrderId, selectedShopId } = useAppSelector(
+        (state) => state.cart,
+    );
     const { shopList } = useAppSelector((state) => state.shops);
     const { userEmail } = useAppSelector((state) => state.profile);
     const navigate = useNavigate();
 
-    const [receiveKind, setReceiveKind] = useState<OrderReceiveKindEnum>();
-    const [receiveShopId, setReceiveShopId] = useState<number>();
+    // const [isEndVisible, setIsEndVisible] = useState(false);
+    const [receiveKind, setReceiveKind] = useState<OrderReceiveKindEnum>(OrderReceiveKindEnum._);
+    // const [receiveShopId, setReceiveShopId] = useState<number>();
+
+    const id = selectedShopId ?? shopList?.[0]?.id;
 
     useEffect(() => {
-        const id = receiveShopId ?? shopList?.[0]?.id;
         if (id) {
             void dispatch(fetchCartProducts(id));
         }
-    }, [dispatch, receiveShopId, shopList]);
+    }, [dispatch, id]);
 
-    useEffect(() => {
-        void dispatch(
-            fetchAllShopList({ count: 20, offset: 0, order: SortOrderEnum.ASC, sortBy: ShopListSortByEnum.ID }),
-        ).then(({ payload }) => {
-            setReceiveShopId((payload as ShopListRespDTO)?.shops?.[0]?.id);
-        });
-    }, [dispatch]);
+    // useInfiniteShopsLoading(isEndVisible);
 
     useEffect(() => {
         if (!userEmail) {
@@ -95,34 +92,19 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         readOnly={!cart?.length}
                                         disabled={!cart?.length}
                                         MenuProps={{ style: { maxHeight: 500 } }}
+                                        defaultValue={OrderReceiveKindEnum._}
                                     >
                                         {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
                                         <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl margin="dense" fullWidth>
-                                    <InputLabel id="select-shop-label">Магазин для доставки</InputLabel>
-                                    <Select<number>
-                                        defaultValue={shopList?.[0]?.id}
-                                        onChange={(e) => setReceiveShopId(+e.target.value)}
-                                        labelId="select-shop-label"
-                                        label="Магазин для доставки"
-                                        readOnly={!cart?.length}
-                                        disabled={!cart?.length}
-                                        MenuProps={{ style: { maxHeight: 500 } }}
-                                    >
-                                        {shopList?.map((shop) => (
-                                            <MenuItem key={shop.id} value={shop.id}>
-                                                {getShopAddress(shop.address)}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+
+                                <ShopSelect fullWidth readOnly={!cart?.length} disabled={!cart?.length} />
                                 <Button
-                                    disabled={!receiveKind || !receiveShopId || !cart?.length}
+                                    disabled={!receiveKind || !selectedShopId || !cart?.length}
                                     onClick={() => {
-                                        if (receiveShopId)
-                                            void dispatch(fetchCreateOrder({ shopId: receiveShopId, receiveKind }));
+                                        if (selectedShopId)
+                                            void dispatch(fetchCreateOrder({ shopId: selectedShopId, receiveKind }));
                                     }}
                                 >
                                     Оформить заказ
