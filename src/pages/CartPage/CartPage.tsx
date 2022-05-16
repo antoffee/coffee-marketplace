@@ -15,12 +15,11 @@ import {
 } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { OrderReceiveKindEnum } from 'client';
-import { useInfiniteShopsLoading } from 'hooks/useInfiniteShopsLoading';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchCartProducts, fetchCreateOrder } from 'store/reducers/cartReducer';
 
 import { CartItemCard } from 'components/CartItemCard';
-import { getShopAddress } from 'utils/getShopAddress';
+import { ShopSelect } from 'components/ShopSelect';
 
 import { CartPageProps } from './CartPage.types';
 
@@ -30,16 +29,18 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const CartPage: React.FC<CartPageProps> = () => {
     const dispatch = useAppDispatch();
-    const { cart, cartPrice, cartLoading, createOrderLoading, createdOrderId } = useAppSelector((state) => state.cart);
+    const { cart, cartPrice, cartLoading, createOrderLoading, createdOrderId, selectedShopId } = useAppSelector(
+        (state) => state.cart,
+    );
     const { shopList } = useAppSelector((state) => state.shops);
     const { userEmail } = useAppSelector((state) => state.profile);
     const navigate = useNavigate();
 
-    const [isEndVisible, setIsEndVisible] = useState(false);
+    // const [isEndVisible, setIsEndVisible] = useState(false);
     const [receiveKind, setReceiveKind] = useState<OrderReceiveKindEnum>(OrderReceiveKindEnum._);
-    const [receiveShopId, setReceiveShopId] = useState<number>();
+    // const [receiveShopId, setReceiveShopId] = useState<number>();
 
-    const id = receiveShopId ?? shopList?.[0]?.id;
+    const id = selectedShopId ?? shopList?.[0]?.id;
 
     useEffect(() => {
         if (id) {
@@ -47,7 +48,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
         }
     }, [dispatch, id]);
 
-    useInfiniteShopsLoading(isEndVisible);
+    // useInfiniteShopsLoading(isEndVisible);
 
     useEffect(() => {
         if (!userEmail) {
@@ -97,49 +98,13 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl margin="dense" fullWidth>
-                                    <InputLabel id="select-shop-label">Магазин для доставки</InputLabel>
-                                    <Select<number>
-                                        defaultValue={shopList?.[0]?.id}
-                                        onChange={(e) => setReceiveShopId(+e.target.value)}
-                                        labelId="select-shop-label"
-                                        label="Магазин для доставки"
-                                        readOnly={!cart?.length}
-                                        disabled={!cart?.length}
-                                        MenuProps={{
-                                            PaperProps: {
-                                                className: 'growing-list',
-                                                style: {
-                                                    maxHeight: Math.min(300, (shopList?.length ?? 0) * 36 + 16),
-                                                    transition: 'all linear 300ms',
-                                                },
-                                                onScroll: (event) => {
-                                                    setIsEndVisible(
-                                                        Math.abs(
-                                                            (event.target as Element).scrollHeight -
-                                                                (event.target as Element).clientHeight -
-                                                                (event.target as Element).scrollTop,
-                                                        ) < 1,
-                                                    );
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {shopList?.map((shop) => (
-                                            <MenuItem key={shop.id} value={shop.id}>
-                                                {getShopAddress(shop.address)}
-                                            </MenuItem>
-                                        ))}
-                                        <MenuItem>
-                                            <div />
-                                        </MenuItem>
-                                    </Select>
-                                </FormControl>
+
+                                <ShopSelect fullWidth readOnly={!cart?.length} disabled={!cart?.length} />
                                 <Button
-                                    disabled={!receiveKind || !receiveShopId || !cart?.length}
+                                    disabled={!receiveKind || !selectedShopId || !cart?.length}
                                     onClick={() => {
-                                        if (receiveShopId)
-                                            void dispatch(fetchCreateOrder({ shopId: receiveShopId, receiveKind }));
+                                        if (selectedShopId)
+                                            void dispatch(fetchCreateOrder({ shopId: selectedShopId, receiveKind }));
                                     }}
                                 >
                                     Оформить заказ

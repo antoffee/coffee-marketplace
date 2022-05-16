@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     CartProductDTO,
     CartRespDTO,
@@ -91,6 +91,9 @@ const productSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        selectDeliveryShop: (state, action: PayloadAction<number>) => {
+            state.selectedShopId = action.payload;
+        },
         resetCartState: () => initialState,
         // standard reducer logic, with auto-generated action types per reducer
     },
@@ -165,5 +168,5 @@ const productSlice = createSlice({
     },
 });
 
-export const { resetCartState: logout } = productSlice.actions;
+export const { resetCartState, selectDeliveryShop } = productSlice.actions;
 export default productSlice.reducer;
