@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ProductService, ShopListSortByEnum, ShopRespDTO, ShopService, SortOrderEnum } from 'client';
-import { Product } from 'types/product';
+import { ProductService, ShopListSortByEnum, ShopProductDTO, ShopRespDTO, ShopService, SortOrderEnum } from 'client';
 
 import { ProductListReqDTO } from './productReducer';
 
@@ -50,7 +49,7 @@ interface ShopsState {
     shopDetails: ShopRespDTO;
     shopDetailsLoading?: boolean;
 
-    shopProducts?: Product[];
+    shopProducts?: ShopProductDTO[];
 }
 
 const initialState = {

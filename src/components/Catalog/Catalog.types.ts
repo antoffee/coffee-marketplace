@@ -1,4 +1,4 @@
-import { Product } from 'types/product';
+import { ShopProductDTO } from 'client';
 
-export type CatalogItemProps = { onClick: () => void; item: Product };
-export type CatalogProps = { items: Product[]; onItemClick: (item: Product) => void };
+export type CatalogItemProps = { onClick: () => void; item: ShopProductDTO };
+export type CatalogProps = { items: ShopProductDTO[]; onItemClick: (item: ShopProductDTO) => void };

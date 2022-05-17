@@ -2,8 +2,8 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { ShopProductDTO } from 'client';
 import { EMPTY_IMAGE } from 'shared/constants';
-import { Product } from 'types/product';
 
 import { formatImgUrl } from 'utils/formatImgUrl';
 
@@ -13,7 +13,7 @@ import styles from './SliderCarousel.module.scss';
 
 const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
-type CarouselItemProps = Product & { onClick: () => void };
+type CarouselItemProps = ShopProductDTO & { onClick: () => void };
 
 const Item = ({ name: title, description, photo: imgUrl, onClick }: CarouselItemProps) => {
     return (

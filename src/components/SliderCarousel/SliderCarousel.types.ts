@@ -1,6 +1,6 @@
-import { Product } from 'types/product';
+import { ShopProductDTO } from 'client';
 
 export type SliderCarouselProps = {
-    items: Product[];
-    onItemClick: (item: Product) => void;
+    items: ShopProductDTO[];
+    onItemClick: (item: ShopProductDTO) => void;
 };

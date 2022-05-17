@@ -10,7 +10,6 @@ import {
     SortOrderEnum,
 } from 'client';
 import { RootState } from 'store/store';
-import { Product } from 'types/product';
 
 export type OrderListReqDTO = {
     count: number;
@@ -40,7 +39,7 @@ export const fetchCartProducts = createAsyncThunk('cart/fetchCartProducts', asyn
 
 export const fetchChangeQty = createAsyncThunk(
     'cart/fetchChangeQty',
-    async ({ item, qty }: { item: Product; qty: number }, thunkApi) => {
+    async ({ item, qty }: { item: { id: number }; qty: number }, thunkApi) => {
         const state = thunkApi.getState() as RootState;
         const resp: CartRespDTO = (await CartService.patchApiCartPatch(
             state.cart.selectedShopId ?? 1,

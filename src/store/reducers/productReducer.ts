@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ProductListSortByEnum, ProductService, ShopProductDTO, SortOrderEnum } from 'client';
-import { Product } from 'types/product';
 
 export type ProductListReqDTO = {
     shopId: number;
@@ -28,7 +27,7 @@ export const fetchProductDetails = createAsyncThunk(
 );
 
 interface ProductState {
-    productList: { shopId: number; products: Product[] }[];
+    productList: { shopId: number; products: ShopProductDTO[] }[];
     productListLoading?: boolean;
     currentProductListOffset: number;
     productsListEndReached?: boolean;
