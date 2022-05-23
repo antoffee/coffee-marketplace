@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { updateAxiosClientCredential } from 'api/axios';
-import { ApiError, AuthService, ResendCodeReqDTO, SignupReqDTO, VerifyCodeReqDTO } from 'client';
+import {
+    AddressAddDTO,
+    ApiError,
+    AuthService,
+    ProfileService,
+    ResendCodeReqDTO,
+    SignupReqDTO,
+    VerifyCodeReqDTO,
+} from 'client';
 
 // First, create the thunk
 export const fetchSignup = createAsyncThunk('users/fetchSugnup', async (request: SignupReqDTO) => {
@@ -15,6 +23,16 @@ export const fetchVerifyCode = createAsyncThunk('users/fetchVerifyCode', async (
 export const fetchResendCode = createAsyncThunk('users/fetchResendCode', async (request: ResendCodeReqDTO) => {
     const response = await AuthService.resendCodeApiAuthResendCodePost(request);
     return response;
+});
+
+export const fetchDeliveryList = createAsyncThunk('users/fetchDeliveryList', async () => {
+    const response = await ProfileService.getListApiProfileAddressListGet();
+    return response.addresses;
+});
+
+export const fetchAddDelivery = createAsyncThunk('users/fetchAddDelivery', async (request: AddressAddDTO) => {
+    const response = await ProfileService.putApiProfileAddressPut(request);
+    return { ...request, id: response.address_id };
 });
 
 export const fetchLoginUser = createAsyncThunk(
@@ -57,6 +75,10 @@ interface ProfileState {
     // userInfo?: unknown;
     userInfoLoading?: boolean;
     userInfoError?: string;
+
+    deliveryAddresses?: AddressAddDTO[];
+    deliveryAddressesLoading?: boolean;
+    addDeliveryError?: string;
 }
 
 const initialState = {} as ProfileState;
@@ -82,7 +104,6 @@ const profileSlice = createSlice({
             state.signUpLoading = true;
             state.signUpError = undefined;
             state.secondsLeft = undefined;
-
         });
         builder.addCase(fetchSignup.fulfilled, (state, action) => {
             state.signUpLoading = false;
@@ -135,6 +156,31 @@ const profileSlice = createSlice({
         builder.addCase(fetchCheckAuthConnection.fulfilled, (state, action) => {
             state.authentificationLoading = false;
             state.userEmail = action.payload?.email;
+        });
+
+        builder.addCase(fetchDeliveryList.pending, (state) => {
+            state.deliveryAddressesLoading = true;
+        });
+        builder.addCase(fetchDeliveryList.fulfilled, (state, action) => {
+            state.deliveryAddresses = action.payload;
+            state.deliveryAddressesLoading = false;
+        });
+        builder.addCase(fetchDeliveryList.rejected, (state) => {
+            state.deliveryAddressesLoading = false;
+            // console.warn(action.error, action.meta);
+        });
+
+        builder.addCase(fetchAddDelivery.pending, (state) => {
+            state.deliveryAddressesLoading = true;
+        });
+        builder.addCase(fetchAddDelivery.fulfilled, (state, action) => {
+            state.deliveryAddresses = (state.deliveryAddresses ?? []).concat(action.payload);
+            state.deliveryAddressesLoading = false;
+        });
+        builder.addCase(fetchAddDelivery.rejected, (state, action) => {
+            state.deliveryAddressesLoading = false;
+            state.addDeliveryError = (action.error as ApiError).statusText ?? action.error;
+            // console.warn(action.error, action.meta);
         });
     },
 });

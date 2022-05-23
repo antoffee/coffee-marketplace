@@ -53,10 +53,19 @@ export const fetchChangeQty = createAsyncThunk(
 
 export const fetchCreateOrder = createAsyncThunk(
     'cart/fetchCreateOrder',
-    async ({ shopId, receiveKind }: { shopId: number; receiveKind?: OrderReceiveKindEnum }) => {
+    async ({
+        shopId,
+        receiveKind,
+        deliveryAddressId,
+    }: {
+        shopId: number;
+        receiveKind?: OrderReceiveKindEnum;
+        deliveryAddressId?: number;
+    }) => {
         const response: { order_id: number } = (await OrderService.placeOrderApiOrderPut({
             shop_id: shopId,
             receive_kind: receiveKind,
+            delivery_address_id: deliveryAddressId,
         })) as {
             order_id: number;
         };
