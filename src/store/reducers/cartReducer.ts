@@ -3,6 +3,7 @@ import {
     CartProductDTO,
     CartRespDTO,
     CartService,
+    OrderBaseDTO,
     OrderListSortByEnum,
     OrderReceiveKindEnum,
     OrderRespDTO,
@@ -53,7 +54,10 @@ export const fetchChangeQty = createAsyncThunk(
 export const fetchCreateOrder = createAsyncThunk(
     'cart/fetchCreateOrder',
     async ({ shopId, receiveKind }: { shopId: number; receiveKind?: OrderReceiveKindEnum }) => {
-        const response: { order_id: number } = (await OrderService.placeOrderApiOrderPut(shopId, receiveKind)) as {
+        const response: { order_id: number } = (await OrderService.placeOrderApiOrderPut({
+            shop_id: shopId,
+            receive_kind: receiveKind,
+        })) as {
             order_id: number;
         };
         return response;
@@ -61,7 +65,7 @@ export const fetchCreateOrder = createAsyncThunk(
 );
 
 interface CartState {
-    orderList: OrderRespDTO[];
+    orderList: OrderBaseDTO[];
     orderListLoading?: boolean;
     orderListTotal: number;
     orderListEndReached?: boolean;

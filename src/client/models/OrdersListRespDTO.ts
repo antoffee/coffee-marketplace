@@ -2,9 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { OrderRespDTO } from './OrderRespDTO';
+import type { OrderBaseDTO } from './OrderBaseDTO';
 
 export type OrdersListRespDTO = {
-    orders: Array<OrderRespDTO>;
+    orders: Array<OrderBaseDTO>;
     total: number;
 };

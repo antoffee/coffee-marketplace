@@ -37,7 +37,7 @@ export const CartPage: React.FC<CartPageProps> = () => {
     const navigate = useNavigate();
 
     // const [isEndVisible, setIsEndVisible] = useState(false);
-    const [receiveKind, setReceiveKind] = useState<OrderReceiveKindEnum>(OrderReceiveKindEnum._);
+    const [receiveKind, setReceiveKind] = useState<OrderReceiveKindEnum>(OrderReceiveKindEnum.TAKEAWAY);
     // const [receiveShopId, setReceiveShopId] = useState<number>();
 
     const id = selectedShopId ?? shopList?.[0]?.id;
@@ -92,10 +92,10 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                         readOnly={!cart?.length}
                                         disabled={!cart?.length}
                                         MenuProps={{ style: { maxHeight: 500 } }}
-                                        defaultValue={OrderReceiveKindEnum._}
+                                        defaultValue={OrderReceiveKindEnum.TAKEAWAY}
                                     >
-                                        {/* <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem> */}
-                                        <MenuItem value={OrderReceiveKindEnum._}>Самовывоз</MenuItem>
+                                        <MenuItem value={OrderReceiveKindEnum.DELIVERY}>Доставка</MenuItem>
+                                        <MenuItem value={OrderReceiveKindEnum.TAKEAWAY}>Самовывоз</MenuItem>
                                     </Select>
                                 </FormControl>
 

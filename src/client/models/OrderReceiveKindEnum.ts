@@ -6,5 +6,6 @@
  * An enumeration.
  */
 export enum OrderReceiveKindEnum {
-    _ = 'самовывоз',
+    TAKEAWAY = 'takeaway',
+    DELIVERY = 'delivery',
 }

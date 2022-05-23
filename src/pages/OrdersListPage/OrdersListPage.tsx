@@ -49,11 +49,7 @@ export const OrdersListPage: React.FC<OrdersListPageProps> = () => {
                                             badgeContent={getStatusName(item.status)}
                                             color={getStatusColor(item.status)}
                                         ></Badge>
-                                        <ListItem>
-                                            <Typography component="span" variant="body2" color="text.primary">
-                                                {item.products?.length ?? 0} позиции
-                                            </Typography>
-                                        </ListItem>
+                                        <ListItem></ListItem>
                                         <ListItem>
                                             <Typography component="span" variant="body2" color="text.primary">
                                                 Стоимость: {item.total_price ?? 0}₽

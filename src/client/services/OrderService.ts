@@ -2,9 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { OrderListSortByEnum } from '../models/OrderListSortByEnum';
-import type { OrderReceiveKindEnum } from '../models/OrderReceiveKindEnum';
 import type { OrderRespDTO } from '../models/OrderRespDTO';
 import type { OrdersListRespDTO } from '../models/OrdersListRespDTO';
+import type { PlaceOrderReqDTO } from '../models/PlaceOrderReqDTO';
 import type { SortOrderEnum } from '../models/SortOrderEnum';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -36,22 +36,18 @@ export class OrderService {
 
     /**
      * Place Order
-     * @param shopId
-     * @param receiveKind
+     * @param requestBody
      * @returns any Successful Response
      * @throws ApiError
      */
     public static placeOrderApiOrderPut(
-        shopId: number,
-        receiveKind?: OrderReceiveKindEnum,
+        requestBody: PlaceOrderReqDTO,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/api/order',
-            query: {
-                'shop_id': shopId,
-                'receive_kind': receiveKind,
-            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },
