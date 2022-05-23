@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-// import cnBind, { Argument } from 'classnames/bind';
 import { useInfiniteShopsLoading } from 'hooks/useInfiniteShopsLoading';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectDeliveryShop } from 'store/reducers/cartReducer';
@@ -9,11 +8,12 @@ import { getShopAddress } from 'utils/getShopAddress';
 
 import { ShopSelectProps } from './ShopSelect.types';
 
-// import styles from './ShopSelect.module.scss';
-
-// const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
-
-export const ShopSelect: React.FC<ShopSelectProps> = ({ readOnly, disabled, fullWidth }) => {
+export const ShopSelect: React.FC<ShopSelectProps> = ({
+    readOnly,
+    disabled,
+    fullWidth,
+    label = 'Магазин для доставки',
+}) => {
     const dispatch = useAppDispatch();
     const { selectedShopId } = useAppSelector((state) => state.cart);
     const [isEndVisible, setIsEndVisible] = useState(false);
@@ -22,12 +22,12 @@ export const ShopSelect: React.FC<ShopSelectProps> = ({ readOnly, disabled, full
     useInfiniteShopsLoading(isEndVisible);
     return (
         <FormControl margin="dense" fullWidth={fullWidth}>
-            <InputLabel id="select-shop-label">Магазин для доставки</InputLabel>
+            <InputLabel id="select-shop-label">{label}</InputLabel>
             <Select<number>
                 value={selectedShopId}
                 onChange={(e) => dispatch(selectDeliveryShop(+e.target.value))}
                 labelId="select-shopa-label"
-                label="Магазин для доставки"
+                label={label}
                 readOnly={readOnly}
                 disabled={disabled}
                 MenuProps={{

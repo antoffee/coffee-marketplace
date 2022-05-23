@@ -126,6 +126,8 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                                 </Select>
                                             </FormControl>
                                         )}
+                                        <ShopSelect label='Магазин для заказа' fullWidth readOnly={!cart?.length} disabled={!cart?.length} />
+
                                         <Button fullWidth onClick={() => setAddDeliveryPopupOpened(true)}>
                                             Добавить адрес <AddCircleOutlined />
                                         </Button>
