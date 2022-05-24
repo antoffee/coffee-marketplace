@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { AddressDTO } from './AddressDTO';
 import type { OrderReceiveKindEnum } from './OrderReceiveKindEnum';
 import type { OrderStatusEnum } from './OrderStatusEnum';
 import type { ShopProductDTO } from './ShopProductDTO';
@@ -11,7 +12,7 @@ export type OrderRespDTO = {
     status: OrderStatusEnum;
     created_at: string;
     receive_kind: OrderReceiveKindEnum;
-    delivery_address?: string;
+    delivery_address?: AddressDTO;
     total_price: number;
     products: Array<ShopProductDTO>;
 };

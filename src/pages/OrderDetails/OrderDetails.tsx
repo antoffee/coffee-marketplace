@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchOrderDetails } from 'store/reducers/cartReducer';
 
 import { CartItemCard } from 'components/CartItemCard';
+import { getDeliveryAddress } from 'utils/getDeliveryAddress';
 import { getReceiveName } from 'utils/getReceiveName';
 import { getStatusColor } from 'utils/getStatusColor';
 import { getStatusName } from 'utils/getStatusName';
@@ -70,7 +71,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                                 </Typography>
                                 {orderDetails?.delivery_address && (
                                     <Typography variant="subtitle2">
-                                        Адрес доставки: {orderDetails?.delivery_address}
+                                        Адрес доставки: {getDeliveryAddress(orderDetails?.delivery_address)}
                                     </Typography>
                                 )}
                                 <Chip
