@@ -2,6 +2,7 @@ import React from 'react';
 import { Delete } from '@mui/icons-material';
 import {
     Avatar,
+    Divider,
     FormControl,
     IconButton,
     InputLabel,
@@ -45,26 +46,29 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
                     </React.Fragment>
                 }
             />
-            <FormControl>
-                <InputLabel id={`qty-select__label-${item.id ?? 0}`}>Количество</InputLabel>
+            <Divider />
+            {!viewOnly && (
+                <FormControl>
+                    <InputLabel id={`qty-select__label-${item.id ?? 0}`}>Количество</InputLabel>
 
-                <Select
-                    MenuProps={{ style: { maxHeight: 500 } }}
-                    sx={{ minWidth: '200px', mr: '10px' }}
-                    labelId={`qty-select__label-${item.id ?? 0}`}
-                    label="Количество"
-                    value={qty ?? undefined}
-                    readOnly={viewOnly}
-                    disabled={viewOnly}
-                    onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}
-                >
-                    {Array.from({ length: item?.availability ?? 1 }, (_, index) => index + 1).map((qty) => (
-                        <MenuItem key={qty} value={qty}>
-                            {qty} шт
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                    <Select
+                        MenuProps={{ style: { maxHeight: 500 } }}
+                        sx={{ minWidth: '200px', mr: '10px' }}
+                        labelId={`qty-select__label-${item.id ?? 0}`}
+                        label="Количество"
+                        value={qty ?? undefined}
+                        readOnly={viewOnly}
+                        disabled={viewOnly}
+                        onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}
+                    >
+                        {Array.from({ length: item?.availability ?? 1 }, (_, index) => index + 1).map((qty) => (
+                            <MenuItem key={qty} value={qty}>
+                                {qty} шт
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            )}
             {!viewOnly && (
                 <IconButton onClick={() => void dispatch(fetchChangeQty({ item, qty: 0 }))}>
                     <Delete />

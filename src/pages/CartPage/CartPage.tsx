@@ -71,15 +71,15 @@ export const CartPage: React.FC<CartPageProps> = () => {
                     </Typography>
                 </Box>
             ) : (
-                <Grid width={'100%'} container spacing={3}>
-                    <Grid item xs={8}>
+                <Grid width={'100%'} container columns={{ xs: 1, sm: 2, md: 2 }} spacing={3}>
+                    <Grid item xs={1} sm={1.3} md={1.3}>
                         {cartLoading && <CircularProgress />}
                         {cart?.map((item) => (
                             <CartItemCard key={item.product?.id} item={item} />
                         ))}
                         {!cartLoading && !cart?.length && <Typography variant="h2">Корзина пуста</Typography>}
                     </Grid>
-                    <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
+                    <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item sm={0.7} md={0.7}>
                         <Card sx={{ width: '100%' }}>
                             <CardContent>
                                 <Typography variant="h5">К оплате: {cartPrice}₽</Typography>

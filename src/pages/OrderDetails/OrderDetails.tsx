@@ -40,8 +40,8 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
             {orderDetailsLoading ? (
                 <CircularProgress />
             ) : (
-                <Grid width={'100%'} container spacing={3}>
-                    <Grid item xs={8}>
+                <Grid width={'100%'} container spacing={3} columns={{ xs: 1, sm: 2, md: 2 }}>
+                    <Grid item xs={1} sm={1.3} md={1.3}>
                         {orderDetails?.products?.map((item) => (
                             <CartItemCard
                                 viewOnly
@@ -50,7 +50,15 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                             />
                         ))}
                     </Grid>
-                    <Grid display={'flex'} flexDirection="column" alignItems={'flex-start'} item xs={4}>
+                    <Grid
+                        display={'flex'}
+                        flexDirection="column"
+                        alignItems={'flex-start'}
+                        item
+                        xs={4}
+                        sm={0.7}
+                        md={0.7}
+                    >
                         <Card sx={{ width: '100%' }}>
                             <CardContent>
                                 <Typography variant="h5">Стоимость: {orderDetails?.total_price}₽</Typography>
