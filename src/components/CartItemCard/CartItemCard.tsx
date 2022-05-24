@@ -40,7 +40,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
                             {item.category}
                         </Typography>
                         <Typography>
-                            {price}₽ ({item.price} ₽ х {qty} шт)
+                            {price}₽ ({item.price} ₽ х {qty ?? 0} шт)
                         </Typography>
                     </React.Fragment>
                 }
@@ -53,7 +53,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
                     sx={{ minWidth: '200px', mr: '10px' }}
                     labelId={`qty-select__label-${item.id ?? 0}`}
                     label="Количество"
-                    value={qty ?? 1}
+                    value={qty ?? undefined}
                     readOnly={viewOnly}
                     disabled={viewOnly}
                     onChange={(e) => void dispatch(fetchChangeQty({ item, qty: +e.target.value }))}
