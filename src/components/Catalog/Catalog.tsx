@@ -23,7 +23,7 @@ const CatalogItemCard = ({ item, onClick }: CatalogItemProps) => (
 
 export const Catalog: React.FC<CatalogProps> = ({ items, onItemClick }) => {
     return (
-        <Grid container spacing={2} columns={4}>
+        <Grid container spacing={2} columns={{ xs: 1, sm: 2, md: 4 }}>
             {items.map((item) => (
                 <Grid xs={1} key={createUUID()} item>
                     <CatalogItemCard item={item} onClick={() => onItemClick(item)} />

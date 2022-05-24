@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Delete } from '@mui/icons-material';
 import {
     Avatar,
@@ -28,10 +28,13 @@ const cx = cnBind.bind(styles) as (...args: Argument[]) => string;
 
 export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, product: item, qty }, viewOnly }) => {
     const dispatch = useAppDispatch();
+
+    const imgUrl = useMemo(() => formatImgUrl(item.photo) ?? EMPTY_IMAGE, [item?.photo]);
+
     return (
         <ListItem sx={{ bgcolor: 'background.paper' }} style={{ display: 'flex' }} className={cx('cart-item')}>
             <ListItemAvatar>
-                <Avatar src={formatImgUrl(item.photo) ?? EMPTY_IMAGE} />
+                <Avatar src={imgUrl} />
             </ListItemAvatar>
             <ListItemText
                 primary={item.name}

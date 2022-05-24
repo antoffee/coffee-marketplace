@@ -51,6 +51,12 @@ export const App: React.FC = () => {
                         paper: '#e3e3e4',
                     },
                 },
+                typography: {
+                    h2: { fontSize: 30, textAlign: 'left' },
+                    h3: {
+                        fontSize: 24,
+                    },
+                },
             })}
         >
             <Box minHeight="100vh" bgcolor={(theme) => theme.palette.background.default} className={cx('App')}>

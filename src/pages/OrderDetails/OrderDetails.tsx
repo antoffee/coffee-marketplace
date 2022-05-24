@@ -55,7 +55,7 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                         flexDirection="column"
                         alignItems={'flex-start'}
                         item
-                        xs={4}
+                        xs={1}
                         sm={0.7}
                         md={0.7}
                     >

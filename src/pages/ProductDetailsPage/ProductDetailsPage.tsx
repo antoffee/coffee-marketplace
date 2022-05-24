@@ -50,7 +50,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = () => {
             {productDetailsLoading ? (
                 <CircularProgress />
             ) : (
-                <Grid container columns={2} spacing={3}>
+                <Grid container columns={{ sm: 2 }} spacing={3}>
                     <Grid item xs={1}>
                         <Card variant="elevation" raised={false}>
                             <CardMedia

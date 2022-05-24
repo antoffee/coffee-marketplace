@@ -36,9 +36,13 @@ export const OrdersListPage: React.FC<OrdersListPageProps> = () => {
         <div className={cx('orders-list-page', 'page')}>
             <Typography variant="h5">Ваши заказы</Typography>
             {!orderListLoading && !orderList?.length && <Typography variant="h2">Список заказов пуст</Typography>}
-            <List sx={{ bgcolor: 'background.paper' }}>
+            <List>
                 {orderList?.map((item) => (
-                    <ListItem key={item.id} onClick={() => navigate(`/orders/${item.id}`)}>
+                    <ListItem
+                        sx={{ bgcolor: 'background.paper', mb: '8px' }}
+                        key={item.id}
+                        onClick={() => navigate(`/orders/${item.id}`)}
+                    >
                         <ListItem>
                             <ListItemText
                                 primary={`Заказ ${formatDate(item.created_at)}`}
