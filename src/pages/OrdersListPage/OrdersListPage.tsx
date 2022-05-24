@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Badge, CircularProgress, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Chip, CircularProgress, List, ListItem, ListItemText, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchOrderList } from 'store/reducers/cartReducer';
@@ -38,18 +38,18 @@ export const OrdersListPage: React.FC<OrdersListPageProps> = () => {
             {!orderListLoading && !orderList?.length && <Typography variant="h2">Список заказов пуст</Typography>}
             <List sx={{ bgcolor: 'background.paper' }}>
                 {orderList?.map((item) => (
-                    <ListItem key={item.id}>
+                    <ListItem key={item.id} onClick={() => navigate(`/orders/${item.id}`)}>
                         <ListItem>
                             <ListItemText
                                 primary={`Заказ ${formatDate(item.created_at)}`}
                                 secondary={
                                     <List>
-                                        <Badge
-                                            sx={{ marginLeft: '40px', width: 'auto', height: 'auto' }}
-                                            badgeContent={getStatusName(item.status)}
-                                            color={getStatusColor(item.status)}
-                                        ></Badge>
-                                        <ListItem></ListItem>
+                                        <ListItem>
+                                            <Chip
+                                                label={getStatusName(item.status)}
+                                                color={getStatusColor(item.status)}
+                                            ></Chip>
+                                        </ListItem>
                                         <ListItem>
                                             <Typography component="span" variant="body2" color="text.primary">
                                                 Стоимость: {item.total_price ?? 0}₽

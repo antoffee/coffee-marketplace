@@ -33,6 +33,7 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
 
     const [step, setStep] = useState<0 | 1>(0);
     const [resendDisabled, setResendDisabled] = useState(true);
+    const [registered, setRegistered] = useState(false);
 
     const handleSubmit = useCallback(
         (values: RegisterFormValues) => () => {
@@ -53,7 +54,9 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
                     break;
 
                 default:
-                    void dispatch(fetchVerifyCode({ code: values.code ?? '', email: values.email }));
+                    void dispatch(fetchVerifyCode({ code: values.code ?? '', email: values.email })).then(() =>
+                        setRegistered(true),
+                    );
             }
         },
         [dispatch, step],
@@ -88,14 +91,20 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({ opened, onCloseCli
                                     </Button>
                                 </>
                             )}
-                            <Button disabled={!valid} variant="contained" onClick={handleSubmit(values)}>
+                            <Button disabled={!valid || registered} variant="contained" onClick={handleSubmit(values)}>
                                 {step === 0 ? 'Отправить код подтверждения' : 'Зарегистрироваться'}
                             </Button>
                             {(signUpError || verifyCodeError) && (
                                 <Alert severity="error">{signUpError || verifyCodeError}</Alert>
                             )}
-                            {step === 1 && !(signUpError || verifyCodeError) && (
+                            {step === 1 && !(signUpError || verifyCodeError) && !registered && (
                                 <Alert severity="info">Код был отправлен на указанный выше адрес почты</Alert>
+                            )}
+                            {step === 1 && registered && (
+                                <Alert severity="success">
+                                    Вы успешно зарегистрировались в приложении. Нажмите Войти для авторизации в
+                                    приложении
+                                </Alert>
                             )}
                         </form>
                     )}

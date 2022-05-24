@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Badge, Card, CardContent, CircularProgress, Grid, Typography } from '@mui/material';
+import { Card, CardContent, Chip, CircularProgress, Grid, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchOrderDetails } from 'store/reducers/cartReducer';
@@ -60,12 +60,15 @@ export const OrderDetails: React.FC<OrderDetailsProps> = () => {
                                 <Typography variant="subtitle2">
                                     Способ доставки: {getReceiveName(orderDetails?.receive_kind)}
                                 </Typography>
-                                <Typography variant="subtitle2">Статус:</Typography>
-                                <Badge
-                                    sx={{ width: 'auto', height: 'auto' }}
-                                    badgeContent={getStatusName(orderDetails?.status)}
+                                {orderDetails?.delivery_address && (
+                                    <Typography variant="subtitle2">
+                                        Адрес доставки: {orderDetails?.delivery_address}
+                                    </Typography>
+                                )}
+                                <Chip
+                                    label={getStatusName(orderDetails?.status)}
                                     color={getStatusColor(orderDetails?.status)}
-                                ></Badge>
+                                ></Chip>
                             </CardContent>
                         </Card>
                     </Grid>

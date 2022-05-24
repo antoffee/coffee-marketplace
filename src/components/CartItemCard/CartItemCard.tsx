@@ -65,9 +65,11 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item: { price, produ
                     ))}
                 </Select>
             </FormControl>
-            <IconButton onClick={() => void dispatch(fetchChangeQty({ item, qty: 0 }))}>
-                <Delete />
-            </IconButton>
+            {!viewOnly && (
+                <IconButton onClick={() => void dispatch(fetchChangeQty({ item, qty: 0 }))}>
+                    <Delete />
+                </IconButton>
+            )}
         </ListItem>
     );
 };
