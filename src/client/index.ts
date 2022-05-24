@@ -7,6 +7,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { AddressAddDTO } from './models/AddressAddDTO';
+export type { AddressDTO } from './models/AddressDTO';
 export type { Body_login_user_api_auth_login_post } from './models/Body_login_user_api_auth_login_post';
 export type { CartProductDTO } from './models/CartProductDTO';
 export type { CartRespDTO } from './models/CartRespDTO';

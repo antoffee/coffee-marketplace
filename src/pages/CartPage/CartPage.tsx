@@ -126,7 +126,12 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                                 </Select>
                                             </FormControl>
                                         )}
-                                        <ShopSelect label='Магазин для заказа' fullWidth readOnly={!cart?.length} disabled={!cart?.length} />
+                                        <ShopSelect
+                                            label="Магазин для заказа"
+                                            fullWidth
+                                            readOnly={!cart?.length}
+                                            disabled={!cart?.length}
+                                        />
 
                                         <Button fullWidth onClick={() => setAddDeliveryPopupOpened(true)}>
                                             Добавить адрес <AddCircleOutlined />
@@ -147,9 +152,11 @@ export const CartPage: React.FC<CartPageProps> = () => {
                                                 fetchCreateOrder({
                                                     shopId: selectedShopId,
                                                     receiveKind,
-                                                    deliveryAddressId: deliveryAddressID
-                                                        ? +deliveryAddressID
-                                                        : undefined,
+                                                    deliveryAddressId:
+                                                        deliveryAddressID &&
+                                                        receiveKind === OrderReceiveKindEnum.DELIVERY
+                                                            ? +deliveryAddressID
+                                                            : undefined,
                                                 }),
                                             );
                                     }}

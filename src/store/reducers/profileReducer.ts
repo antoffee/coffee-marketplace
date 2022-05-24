@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { updateAxiosClientCredential } from 'api/axios';
 import {
     AddressAddDTO,
+    AddressDTO,
     ApiError,
     AuthService,
     ProfileService,
@@ -76,7 +77,7 @@ interface ProfileState {
     userInfoLoading?: boolean;
     userInfoError?: string;
 
-    deliveryAddresses?: AddressAddDTO[];
+    deliveryAddresses?: AddressDTO[];
     deliveryAddressesLoading?: boolean;
     addDeliveryError?: string;
 }

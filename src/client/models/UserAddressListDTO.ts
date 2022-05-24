@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { AddressAddDTO } from './AddressAddDTO';
+import type { AddressDTO } from './AddressDTO';
 
 export type UserAddressListDTO = {
-    addresses: Array<AddressAddDTO>;
+    addresses: Array<AddressDTO>;
 };
