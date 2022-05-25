@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography } from '@mui/material';
+import { Button, debounce, Typography } from '@mui/material';
 import cnBind, { Argument } from 'classnames/bind';
+import { ShopRespDTO } from 'client';
 import { useEmergenceTracking } from 'hooks/useEmergenceTracking';
 import { useInfiniteShopsLoading } from 'hooks/useInfiniteShopsLoading';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchProductList } from 'store/reducers/productReducer';
+import { AppDispatch } from 'store/store';
 
 import { SliderCarousel } from 'components/SliderCarousel';
 import { getShopAddress } from 'utils/getShopAddress';
@@ -24,9 +26,27 @@ export const HomePage: React.FC<HomePageProps> = () => {
 
     const { isVisible, visibilityRef } = useEmergenceTracking();
 
+    const debounsedFetch = useMemo(
+        () =>
+            debounce((dispatch: AppDispatch, shownStores: ShopRespDTO[]) =>
+                shownStores?.forEach(
+                    (store) => void dispatch(fetchProductList({ count: 4, offset: 0, shopId: store.id })),
+                    10,
+                ),
+            ),
+        [],
+    );
+
+    const notLoadedStores = useMemo(
+        () => shownStores?.filter(({ id }) => !productList?.some((prod) => prod.shopId === id)),
+        [productList, shownStores],
+    );
+
     useEffect(() => {
-        shownStores?.forEach((store) => void dispatch(fetchProductList({ count: 4, offset: 0, shopId: store.id })));
-    }, [dispatch, shownStores]);
+        if (notLoadedStores) {
+            debounsedFetch(dispatch, notLoadedStores);
+        }
+    }, [debounsedFetch, dispatch, notLoadedStores]);
 
     useInfiniteShopsLoading(isVisible);
 
